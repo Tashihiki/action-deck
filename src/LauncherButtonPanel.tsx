@@ -23,6 +23,7 @@ export function LauncherIconRenderer({ macro, isRunning, plugin }: LauncherIconR
         iconRef.current.empty();
         setIcon(iconRef.current, macro.icon || "help-circle");
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.error("Lucide icon render error", e);
       }
     } else if (macro.type === "svg" && iconRef.current) {
@@ -62,12 +63,19 @@ export function LauncherIconRenderer({ macro, isRunning, plugin }: LauncherIconR
               } else {
                 src = (plugin.app.vault.adapter as import("obsidian").FileSystemAdapter).getResourcePath(normalizePath(macro.icon));
               }
-            } catch (e) { console.error("Path conversion error", e); }
+            } catch (e) {
+              // eslint-disable-next-line no-console
+              console.error("Path conversion error", e);
+            }
           }
           return (
             <img src={src} alt={macro.label} loading="lazy" decoding="async"
               style={{ maxWidth: "100%", maxHeight: "100%", width: "auto", height: "auto", minWidth: "1px", minHeight: "1px", objectFit: "contain", opacity: isRunning ? 0.3 : 1, transition: "opacity 0.2s ease" } as React.CSSProperties}
-              onError={() => { console.warn("Action Deck: Image load failed", { src, label: macro.label }); setHasError(true); }}
+              onError={() => {
+                // eslint-disable-next-line no-console
+                console.warn("Action Deck: Image load failed", { src, label: macro.label });
+                setHasError(true);
+              }}
             />
           );
         }
@@ -78,6 +86,7 @@ export function LauncherIconRenderer({ macro, isRunning, plugin }: LauncherIconR
           return <span style={iconStyle}>{macro.icon || "?"}</span>;
       }
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error("LauncherIconRenderer error", e);
       return <span style={iconStyle}>⚠️</span>;
     }
@@ -171,7 +180,10 @@ export function LauncherButtonPanel({ app, plugin }: Props) {
       if (btnRef.current && btn.label) {
         try {
           setTooltip(btnRef.current, btn.label);
-        } catch (e) { console.error("setTooltip error", e); }
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.error("setTooltip error", e);
+        }
       }
     }, [btn.label]);
 

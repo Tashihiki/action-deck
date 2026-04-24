@@ -44,6 +44,7 @@ export function sanitizeSVG(svgStr: string): string {
     }
     return "";
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.warn("SVG sanitize error", e);
     return "";
   }
@@ -66,6 +67,7 @@ export function setSanitizedSVG(parent: HTMLElement, svgStr: string): void {
       parent.appendChild(node);
     }
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.warn("setSanitizedSVG error", e);
   }
 }
