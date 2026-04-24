@@ -1,0 +1,10 @@
+{
+  "id": "action-deck",
+  "name": "Action Deck",
+  "version": "1.0.0",
+  "minAppVersion": "1.4.0",
+  "description": "A customizable sidebar launcher that lets you run any command with a single click. Organize buttons into groups, use emoji, Lucide icons, images, or SVG as icons.",
+  "author": "Tashihiki",
+  "authorUrl": "https://github.com/tashihiki",
+  "isDesktopOnly": false
+}

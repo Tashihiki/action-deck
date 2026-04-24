@@ -1,0 +1,457 @@
+/* ============================================================
+   Action Deck — Launcher Panel Styles
+   ============================================================ */
+
+/* パネル全体 */
+.ll-launcher-panel {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* ヘッダー */
+.ll-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  margin-bottom: 8px;
+}
+
+.ll-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-normal);
+}
+
+/* ボタンエリア */
+.ll-launcher-buttons-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 50px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* グループコンテナ */
+.ll-launcher-groups {
+  display: flex;
+  flex-direction: column;
+  padding-top: 12px;
+  padding-bottom: 24px;
+  gap: 16px;
+  overflow: visible;
+  flex: 1;
+}
+
+.ll-launcher-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.ll-launcher-group-title {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 6px;
+  letter-spacing: 0.05em;
+}
+
+/* ボタングリッド */
+.ll-launcher-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-content: flex-start;
+}
+
+/* ランチャーボタン */
+.ll-launcher-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5em;
+  margin: 0;
+  width: var(--btn-size);
+  height: var(--btn-size);
+  aspect-ratio: 1 / 1;
+  flex: 0 0 auto;
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 0.55em;
+  cursor: pointer;
+  color: var(--text-normal);
+  transition: all 0.12s ease;
+  user-select: none;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.ll-launcher-btn:hover:not(:disabled) {
+  background: var(--background-modifier-hover);
+  border-color: var(--interactive-accent);
+}
+
+.ll-launcher-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.ll-launcher-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ll-launcher-btn.ll-launcher-running {
+  border-color: var(--interactive-accent);
+  background: var(--background-modifier-active-hover);
+}
+ 
+.ll-launcher-btn.ll-flexible {
+  width: auto;
+  min-width: var(--btn-size);
+  aspect-ratio: auto;
+  padding: 0 0.8em;
+}
+
+.ll-launcher-icon {
+  font-size: 1.5em;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.ll-launcher-icon svg,
+.ll-launcher-icon .ll-launcher-svg-container,
+.ll-launcher-icon .ll-launcher-svg-container svg {
+  width: 1em;
+  height: 1em;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.ll-launcher-icon img {
+  width: 1em;
+  height: 1em;
+  object-fit: contain;
+}
+
+.ll-launcher-icon.ll-type-text {
+  height: 100%;
+  font-size: 1em;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 空の場合 */
+.ll-empty {
+  color: var(--text-muted);
+  font-size: 12px;
+  text-align: center;
+  padding: 16px 8px;
+}
+
+/* ============================================================
+   Settings UI
+   ============================================================ */
+
+.ll-settings-launcher-list {
+  margin: 8px 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ll-settings-launcher-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 6px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.ll-settings-launcher-sort-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 10px;
+  padding: 2px 4px;
+  line-height: 1;
+  border-radius: 3px;
+}
+
+.ll-settings-launcher-sort-btn:hover:not(:disabled) {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+.ll-settings-launcher-sort-btn:disabled {
+  opacity: 0.1;
+  cursor: default;
+}
+
+.ll-settings-launcher-del {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 14px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.ll-settings-launcher-del:hover {
+  background: var(--background-modifier-error);
+  color: var(--text-error);
+}
+
+.ll-settings-launcher-label-input {
+  font-size: 13px;
+  font-weight: bold;
+  background: none;
+  border: 1px solid transparent;
+  width: 350px;
+  max-width: 100%;
+  color: var(--text-normal);
+  padding: 2px 4px;
+}
+
+.ll-settings-launcher-label-input:hover,
+.ll-settings-launcher-label-input:focus {
+  border-color: var(--background-modifier-border);
+  background: var(--background-primary);
+}
+
+.ll-settings-launcher-input {
+  padding: 5px 8px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 5px;
+  background: var(--background-primary);
+  color: var(--text-normal);
+  font-size: 13px;
+}
+
+.ll-suggest-id {
+  display: block;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+/* Spin animation */
+@keyframes ll-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Settings Helpers */
+.ll-setting-flex-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.ll-setting-row-header {
+  display: flex;
+  gap: 4px;
+}
+
+/* card & modal layout helpers */
+.ll-setting-card {
+  flex-direction: column;
+  align-items: stretch !important;
+  background: var(--background-secondary);
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  border: 1px solid var(--background-modifier-border);
+}
+
+.ll-clickable-header {
+  cursor: pointer;
+}
+
+.ll-preview-box-small {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  overflow: hidden;
+}
+
+.ll-preview-box-large {
+  width: 60px;
+  height: 60px;
+  margin: 8px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  background: var(--background-primary);
+}
+
+.ll-setting-grid-2col {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 16px;
+}
+
+.ll-setting-grid-equal {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.ll-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.ll-setting-section-header {
+  background: rgba(var(--interactive-accent-rgb), 0.1);
+  padding: 8px 12px;
+  border-radius: 4px;
+  border-left: 4px solid var(--interactive-accent);
+  margin-top: 32px;
+  margin-bottom: 8px;
+  color: var(--text-normal);
+}
+
+/* View layout helpers */
+.ll-view-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+}
+
+.ll-view-mount {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+}
+
+/* Undo link in notices */
+.ll-undo-link {
+  cursor: pointer;
+  color: var(--text-accent);
+  text-decoration: underline;
+}
+
+/* HistoryModal */
+.ll-history-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0 16px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  margin-bottom: 16px;
+}
+
+.ll-history-header-icon {
+  font-size: 1.8em;
+}
+
+.ll-history-title-container {
+  flex: 1;
+}
+
+.ll-history-title-container h2 {
+  margin: 0;
+}
+
+.ll-history-clear-btn {
+  color: var(--text-error);
+}
+
+.ll-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ll-history-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.ll-history-row-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.ll-history-date {
+  font-size: 0.85em;
+}
+
+.ll-history-item-name {
+  font-weight: bold;
+}
+
+/* ImageSuggestModal */
+.ll-image-suggest-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.ll-image-suggest-preview {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  overflow: hidden;
+}
+
+.ll-image-suggest-preview svg {
+  width: 100%;
+  height: 100%;
+}
+
+.ll-image-suggest-preview img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.ll-image-suggest-path {
+  font-size: 0.8em;
+  color: var(--text-muted);
+}

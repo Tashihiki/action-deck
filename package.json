@@ -1,0 +1,32 @@
+{
+  "name": "action-deck",
+  "version": "1.0.0",
+  "description": "Obsidian plugin - customizable sidebar launcher",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "npm run lint && node esbuild.config.mjs production",
+    "lint": "npx eslint src"
+  },
+  "keywords": [],
+  "author": "Tashihiki",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "builtin-modules": "^3.3.0",
+    "esbuild": "^0.21.0",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "obsidian": "latest",
+    "tslib": "^2.6.0",
+    "typescript": "^5.0.0",
+    "typescript-eslint": "^8.59.0"
+  },
+  "dependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  }
+}
