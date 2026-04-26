@@ -45,7 +45,7 @@ export default class ActionDeckPlugin extends Plugin implements IActionDeckPlugi
     );
 
     // Ribbon icon
-    this.addRibbonIcon("layout-grid", "ActionDeck", () => {
+    this.addRibbonIcon("layout-grid", "Action deck", () => {
       this.activateLauncherButtonView();
     });
 
@@ -76,14 +76,14 @@ export default class ActionDeckPlugin extends Plugin implements IActionDeckPlugi
       let dataChanged = false;
       this.settings.launcherButtons.forEach((m, idx) => {
         // Assign IDs if missing
-        if (!m.id) { 
-          m.id = "m-" + Date.now() + "-" + idx; 
-          dataChanged = true; 
+        if (!m.id) {
+          m.id = "m-" + Date.now() + "-" + idx;
+          dataChanged = true;
         }
         // Ensure actions exists
-        if (!m.actions) { 
-          m.actions = []; 
-          dataChanged = true; 
+        if (!m.actions) {
+          m.actions = [];
+          dataChanged = true;
         }
         // Initialize empty group if missing
         if (m.launcherGroup === undefined) {
@@ -91,7 +91,7 @@ export default class ActionDeckPlugin extends Plugin implements IActionDeckPlugi
           dataChanged = true;
         }
       });
-      
+
       if (dataChanged) await this.saveSettings();
     }
   }

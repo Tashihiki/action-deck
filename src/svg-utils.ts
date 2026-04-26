@@ -43,9 +43,7 @@ export function sanitizeSVG(svgStr: string): string {
         return new XMLSerializer().serializeToString(svg);
     }
     return "";
-  } catch (e) {
-    // eslint-disable-next-line no-console
-    console.warn("SVG sanitize error", e);
+  } catch {
     return "";
   }
 }
@@ -66,8 +64,7 @@ export function setSanitizedSVG(parent: HTMLElement, svgStr: string): void {
       const node = document.importNode(svgEl, true);
       parent.appendChild(node);
     }
-  } catch (e) {
-    // eslint-disable-next-line no-console
-    console.warn("setSanitizedSVG error", e);
+  } catch {
+    // ignore
   }
 }

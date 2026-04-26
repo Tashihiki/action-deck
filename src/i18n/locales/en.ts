@@ -11,13 +11,13 @@ const en = {
     reset: "Reset to default",
     save: "Save",
     unknown: "Unknown",
-    noLabel: "no label",
+    noLabel: "No label",
     confirm: "Confirm",
   },
 
   panel: {
     title: "ActionDeck",
-    empty: "Go to Settings > ActionDeck to add launcher buttons",
+    empty: "Go to Settings > Action deck to add launcher buttons",
   },
 
   settings: {
@@ -47,7 +47,7 @@ const en = {
       heading: "Launcher buttons",
       sectionDesc: "Define individual launcher buttons",
       empty: "No buttons yet. Add one below",
-      warningLabel: "Label or command id is empty",
+      warningLabel: "Label or command ID is empty",
       addBtn: "Add button",
       historyTooltip: "Recent deletions",
       alreadyExists: "This button already exists",
@@ -58,7 +58,7 @@ const en = {
       label: "Label",
       group: "Group",
       iconColor: "Icon color",
-      commandId: "Command id",
+      commandId: "Command ID",
       ungrouped: "Ungrouped",
       selectImage: "Select image",
 
@@ -71,8 +71,8 @@ const en = {
       typeText: "Text or emoji",
       typeLucide: "Lucide",
       typeImage: "Image in vault",
-      typeImageUrl: "Image from url",
-      typeSvg: "Svg code",
+      typeImageUrl: "Image from URL",
+      typeSvg: "SVG code",
     },
   },
 

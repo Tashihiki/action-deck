@@ -22,9 +22,8 @@ export function LauncherIconRenderer({ macro, isRunning, plugin }: LauncherIconR
       try {
         iconRef.current.empty();
         setIcon(iconRef.current, macro.icon || "help-circle");
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.error("Lucide icon render error", e);
+      } catch {
+        // ignore
       }
     } else if (macro.type === "svg" && iconRef.current) {
       setSanitizedSVG(iconRef.current, macro.icon || "");
@@ -63,17 +62,14 @@ export function LauncherIconRenderer({ macro, isRunning, plugin }: LauncherIconR
               } else {
                 src = (plugin.app.vault.adapter as import("obsidian").FileSystemAdapter).getResourcePath(normalizePath(macro.icon));
               }
-            } catch (e) {
-              // eslint-disable-next-line no-console
-              console.error("Path conversion error", e);
+            } catch {
+              // ignore
             }
           }
           return (
             <img src={src} alt={macro.label} loading="lazy" decoding="async"
               style={{ maxWidth: "100%", maxHeight: "100%", width: "auto", height: "auto", minWidth: "1px", minHeight: "1px", objectFit: "contain", opacity: isRunning ? 0.3 : 1, transition: "opacity 0.2s ease" } as React.CSSProperties}
               onError={() => {
-                // eslint-disable-next-line no-console
-                console.warn("ActionDeck: Image load failed", { src, label: macro.label });
                 setHasError(true);
               }}
             />
@@ -85,9 +81,7 @@ export function LauncherIconRenderer({ macro, isRunning, plugin }: LauncherIconR
         default:
           return <span style={iconStyle}>{macro.icon || "?"}</span>;
       }
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error("LauncherIconRenderer error", e);
+    } catch {
       return <span style={iconStyle}>⚠️</span>;
     }
   };
@@ -180,9 +174,8 @@ export function LauncherButtonPanel({ app, plugin }: Props) {
       if (btnRef.current && btn.label) {
         try {
           setTooltip(btnRef.current, btn.label);
-        } catch (e) {
-          // eslint-disable-next-line no-console
-          console.error("setTooltip error", e);
+        } catch {
+          // ignore
         }
       }
     }, [btn.label]);
