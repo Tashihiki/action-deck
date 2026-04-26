@@ -8,7 +8,7 @@ export class ImageSuggestModal extends FuzzySuggestModal<TFile> {
   constructor(app: App, onSelect: (file: TFile) => void) {
     super(app);
     this.onSelect = onSelect;
-    this.setPlaceholder(t("modals.image.placeholder"));
+    this.setPlaceholder(t("modals.image.placeholder") + " (png, jpg, svg, webp...)");
   }
 
   getItems(): TFile[] {

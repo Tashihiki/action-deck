@@ -26,17 +26,17 @@ export class HistoryModal extends Modal {
     const header = contentEl.createDiv({ cls: "ll-history-header" });
     header.createSpan({ text: "🕒", cls: "ll-history-header-icon" });
     const titleContainer = header.createDiv({ cls: "ll-history-title-container" });
-    titleContainer.createEl("h2", { text: t("history.title", { name: this.sectionName }) });
+    titleContainer.createEl("h2", { text: t("history.title") + ": " + this.sectionName });
 
-    const clearBtn = header.createEl("button", { text: t("history.clearBtn"), cls: "ll-history-clear-btn" });
+    const clearBtn = header.createEl("button", { text: "✕ " + t("history.clearBtn"), cls: "ll-history-clear-btn" });
     clearBtn.onclick = () => {
       new GenericConfirmModal(
         this.app,
-        t("history.clearBtn"),
-        t("history.clearConfirm", { name: this.sectionName }),
+        "✕ " + t("history.clearBtn"),
+        t("history.clearConfirm") + " " + this.sectionName + "?",
         async () => {
           await this.plugin.historyManager.clear(this.sectionId);
-          new Notice(t("history.cleared"));
+          new Notice("✅ " + t("history.cleared"));
           this.render();
         },
         t("common.confirm"),
@@ -46,7 +46,7 @@ export class HistoryModal extends Modal {
 
     const historyList = this.plugin.historyManager.getHistory(this.sectionId);
     if (historyList.length === 0) {
-      contentEl.createEl("p", { text: t("history.empty"), cls: "setting-item-description" });
+      contentEl.createEl("p", { text: t("history.empty") + ".", cls: "setting-item-description" });
       return;
     }
 
@@ -75,7 +75,7 @@ export class HistoryModal extends Modal {
         const takenItem = await this.plugin.historyManager.takeItem(this.sectionId, queryId);
         if (takenItem) {
           await this.onRestore(takenItem);
-          new Notice(t("history.restored", { name: itemName }));
+          new Notice("✅ " + t("history.restored") + ": " + itemName);
           this.render();
         }
       };

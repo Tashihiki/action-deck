@@ -22,7 +22,7 @@ export function renderSection_LauncherGroups(tab: ISettingsTab, containerEl: HTM
     groupListEl.empty();
     const groups = settings.launcherGroups;
     if (!groups || groups.length === 0) {
-      groupListEl.createEl("p", { text: t("settings.groups.empty"), cls: "setting-item-description" });
+      groupListEl.createEl("p", { text: t("settings.groups.empty") + ".", cls: "setting-item-description" });
       return;
     }
 
@@ -30,12 +30,12 @@ export function renderSection_LauncherGroups(tab: ISettingsTab, containerEl: HTM
       const row = groupListEl.createDiv({ cls: "ll-settings-launcher-row" });
 
       const nameInput = row.createEl("input", { type: "text", value: groupName, cls: "ll-settings-launcher-label-input" });
-      nameInput.placeholder = t("settings.groups.placeholder");
+      nameInput.placeholder = t("settings.groups.placeholder") + "...";
       nameInput.style.flex = "1";
 
       const warningIcon = row.createSpan({ text: "⚠️" });
       warningIcon.style.display = groupName.trim() ? "none" : "inline";
-      warningIcon.title = t("settings.groups.warningEmpty");
+      warningIcon.title = t("settings.groups.warningEmpty") + ".";
 
       const rightHeader = row.createDiv({ cls: "ll-setting-row-header" });
 
@@ -95,7 +95,7 @@ export function renderSection_LauncherGroups(tab: ISettingsTab, containerEl: HTM
   new Setting(containerEl)
     .addButton(btn => btn
       .setIcon("history")
-      .setTooltip(t("settings.groups.historyTooltip"))
+      .setTooltip(t("settings.groups.historyTooltip") + " (restore)")
       .onClick(() => {
         new HistoryModal(tab.app, tab.plugin, "launcherGroups", t("settings.groups.heading"), async (takenItem) => {
           const groups = tab.plugin.settings.launcherGroups;
@@ -104,7 +104,7 @@ export function renderSection_LauncherGroups(tab: ISettingsTab, containerEl: HTM
             groups.push(data);
             await tab.plugin.saveSettings();
           } else {
-            new Notice(t("settings.groups.alreadyExists", { name: data }));
+            new Notice("⚠️ " + t("settings.groups.alreadyExists", { name: data }));
           }
           renderGroupList();
           if (refresh) refresh();
@@ -112,7 +112,7 @@ export function renderSection_LauncherGroups(tab: ISettingsTab, containerEl: HTM
       })
     )
     .addButton(btn => btn
-      .setButtonText(t("settings.groups.addBtn"))
+      .setButtonText("＋ " + t("settings.groups.addBtn"))
       .setCta()
       .onClick(async () => {
         settings.launcherGroups.push(t("settings.groups.newGroup"));
@@ -133,7 +133,7 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
     const launcherButtons = tab.plugin.settings.launcherButtons;
 
     if (launcherButtons.length === 0) {
-      launcherButtonListEl.createEl("p", { text: t("settings.buttons.empty"), cls: "setting-item-description" });
+      launcherButtonListEl.createEl("p", { text: t("settings.buttons.empty") + ".", cls: "setting-item-description" });
       return;
     }
 
@@ -208,7 +208,7 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
       labelWrapper.style.alignItems = "center";
       labelWrapper.style.gap = "6px";
 
-      const labelText = labelWrapper.createDiv({ text: btn.label || t("common.noLabel") });
+      const labelText = labelWrapper.createDiv({ text: btn.label || `(${t("common.noLabel")})` });
       labelText.style.fontWeight = "bold";
       labelText.style.fontSize = "13px";
       const warningIcon = labelWrapper.createSpan({ text: "⚠️" });
@@ -218,7 +218,7 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
         warningIcon.style.display = (btn.label?.trim() && firstAction?.commandId?.trim()) ? "none" : "inline";
       };
       updateWarningVisible();
-      warningIcon.title = t("settings.buttons.warningLabel");
+      warningIcon.title = t("settings.buttons.warningLabel") + ".";
 
       if (btn.launcherGroup && tab.plugin.settings.launcherGroups.includes(btn.launcherGroup)) {
         const groupTag = infoText.createDiv({ text: btn.launcherGroup });
@@ -383,7 +383,7 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
           };
           if (type === "image") {
             input.style.display = "none";
-            const selectBtn = inputRow.createEl("button", { text: t("settings.buttons.selectImage") });
+            const selectBtn = inputRow.createEl("button", { text: t("settings.buttons.selectImage") + "..." });
             selectBtn.style.flex = "1";
             selectBtn.onclick = () => {
               new ImageSuggestModal(tab.app, async (file) => {
@@ -424,7 +424,7 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
       };
       labelInp.onchange = async () => {
         btn.label = labelInp.value.trim();
-        labelText.setText(btn.label || t("common.noLabel"));
+        labelText.setText(btn.label || `(${t("common.noLabel")})`);
         updateWarningVisible();
         await tab.plugin.saveSettings();
       };
@@ -499,7 +499,7 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
   new Setting(containerEl)
     .addButton(btn => btn
       .setIcon("history")
-      .setTooltip(t("settings.buttons.historyTooltip"))
+      .setTooltip(t("settings.buttons.historyTooltip") + " (restore)")
       .onClick(() => {
         new HistoryModal(tab.app, tab.plugin, "launcherButtons", t("settings.buttons.heading"), async (takenItem) => {
           const buttons = tab.plugin.settings.launcherButtons;
@@ -508,14 +508,14 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
             buttons.push(data);
             await tab.plugin.saveSettings();
           } else {
-            new Notice(t("settings.buttons.alreadyExists"));
+            new Notice("⚠️ " + t("settings.buttons.alreadyExists"));
           }
           tab.renderSection_LauncherButtons(containerEl);
         }).open();
       })
     )
     .addButton(btn => btn
-      .setButtonText(t("settings.buttons.addBtn"))
+      .setButtonText("＋ " + t("settings.buttons.addBtn"))
       .setCta()
       .onClick(async () => {
         const newId = "m-" + Date.now() + "-" + Math.random().toString(36).substring(2, 5);
@@ -540,7 +540,7 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
   resetRow.style.paddingTop = "20px";
   resetRow.style.display = "flex";
   resetRow.style.justifyContent = "flex-end";
-  const restorePresetBtn = resetRow.createEl("button", { text: t("settings.buttons.restoreBtn"), cls: "mod-cta" });
+  const restorePresetBtn = resetRow.createEl("button", { text: "↺ " + t("settings.buttons.restoreBtn"), cls: "mod-cta" });
   restorePresetBtn.onclick = async () => {
     const settings = tab.plugin.settings;
     const missingButtons = DEFAULT_SETTINGS.launcherButtons.filter(db => !settings.launcherButtons.some(cb => cb.id === db.id));

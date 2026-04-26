@@ -5,7 +5,7 @@ import { t } from "./i18n";
 export class IconSuggestModal extends obsidian.FuzzySuggestModal<string> {
   constructor(app: obsidian.App, private onSelect: (iconId: string) => void) {
     super(app);
-    this.setPlaceholder(t("modals.icon.placeholder"));
+    this.setPlaceholder(t("modals.icon.placeholder") + "...");
   }
   getItems(): string[] { return obsidian.getIconIds(); }
   getItemText(item: string): string { return item; }

@@ -1,5 +1,5 @@
 // =============================================================================
-// main.ts — Action Deck
+// main.ts — ActionDeck
 // =============================================================================
 import { Plugin, WorkspaceLeaf, Menu } from "obsidian";
 import * as obsidian from "obsidian";
@@ -8,6 +8,7 @@ import { LauncherButtonView, VIEW_TYPE_LAUNCHER_BUTTON } from "./LauncherButtonV
 import { DEFAULT_SETTINGS, PluginSettings, IActionDeckPlugin } from "./types";
 import { ActionDeckSettingTab } from "./SettingsTab";
 import { HistoryManager } from "./HistoryManager";
+import { t } from "./i18n";
 
 export default class ActionDeckPlugin extends Plugin implements IActionDeckPlugin {
   settings: PluginSettings = DEFAULT_SETTINGS;
@@ -44,7 +45,7 @@ export default class ActionDeckPlugin extends Plugin implements IActionDeckPlugi
     );
 
     // Ribbon icon
-    this.addRibbonIcon("layout-grid", "Action Deck", () => {
+    this.addRibbonIcon("layout-grid", "ActionDeck", () => {
       this.activateLauncherButtonView();
     });
 
@@ -142,7 +143,7 @@ export default class ActionDeckPlugin extends Plugin implements IActionDeckPlugi
 
             const success = (this.app as import("./types").ObsidianApp).commands.executeCommandById(action.commandId);
             if (!success) {
-              new obsidian.Notice(`⚠️ Command not found: ${action.commandId}`);
+              new obsidian.Notice(`⚠️ ${t("notice.commandNotFound")}: ${action.commandId}`);
               break;
             }
           }

@@ -19,7 +19,7 @@ export class LauncherButtonView extends ItemView {
   }
 
   getViewType(): string { return VIEW_TYPE_LAUNCHER_BUTTON; }
-  getDisplayText(): string { return "Action Deck"; }
+  getDisplayText(): string { return "ActionDeck"; }
   getIcon(): string { return "layout-grid"; }
 
   onOpen(): Promise<void> {

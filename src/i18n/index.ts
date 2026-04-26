@@ -3,7 +3,7 @@
 //
 // Usage:
 //   import { t } from "../i18n";
-//   t("panel.title")                                      // → "🎛️ Action Deck"
+//   t("panel.title")                                      // → "🎛️ ActionDeck"
 //   t("settings.groups.alreadyExists", { name: "Work" }) // → '⚠️ "Work" already exists'
 // =============================================================================
 

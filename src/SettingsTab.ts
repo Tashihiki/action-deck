@@ -1,5 +1,5 @@
 // =============================================================================
-// SettingsTab.ts — Action Deck settings tab
+// SettingsTab.ts — ActionDeck settings tab
 // =============================================================================
 import { App, PluginSettingTab, Setting, Notice } from "obsidian";
 import type ActionDeckPlugin from "./main";
@@ -22,8 +22,8 @@ export class ActionDeckSettingTab extends PluginSettingTab implements ISettingsT
     renderCallback();
 
     const frag = document.createDocumentFragment();
-    frag.appendText(t("notice.itemDeleted") + " ");
-    const a = frag.createEl("a", { text: t("notice.undo"), cls: "ll-undo-link" });
+    frag.appendText(t("notice.itemDeleted") + ". ");
+    const a = frag.createEl("a", { text: `(${t("notice.undo")})`, cls: "ll-undo-link" });
     let restored = false;
     a.onclick = async () => {
       if (restored) return;
@@ -33,7 +33,7 @@ export class ActionDeckSettingTab extends PluginSettingTab implements ISettingsT
         list.splice(insertIdx, 0, latest.data);
         await this.plugin.saveSettings();
         renderCallback();
-        new Notice(t("notice.undoRestored"));
+        new Notice("✅ " + t("notice.undoRestored"));
         restored = true;
       }
     };
@@ -55,9 +55,9 @@ export class ActionDeckSettingTab extends PluginSettingTab implements ISettingsT
       .setHeading();
 
     // ─── Button Size ─────────────────────────────────────────────
-    this.createSectionHeading(containerEl, t("settings.buttonSize.heading"));
+    this.createSectionHeading(containerEl, "🔘 " + t("settings.buttonSize.heading"));
     containerEl.createEl("p", {
-      text: t("settings.buttonSize.sectionDesc"),
+      text: t("settings.buttonSize.sectionDesc") + ".",
       cls: "setting-item-description"
     });
     new Setting(containerEl)
@@ -75,17 +75,17 @@ export class ActionDeckSettingTab extends PluginSettingTab implements ISettingsT
       );
 
     // ─── Launcher Groups ─────────────────────────────────────────
-    this.createSectionHeading(containerEl, t("settings.groups.heading"));
+    this.createSectionHeading(containerEl, "📂 " + t("settings.groups.heading"));
     containerEl.createEl("p", {
-      text: t("settings.groups.sectionDesc"),
+      text: t("settings.groups.sectionDesc") + " Buttons will be displayed in group order.",
       cls: "setting-item-description"
     });
     renderSection_LauncherGroups(this, containerEl, () => this.display());
 
     // ─── Launcher Buttons ─────────────────────────────────────────
-    this.createSectionHeading(containerEl, t("settings.buttons.heading"));
+    this.createSectionHeading(containerEl, "🕹️ " + t("settings.buttons.heading"));
     containerEl.createEl("p", {
-      text: t("settings.buttons.sectionDesc"),
+      text: t("settings.buttons.sectionDesc") + ". Each button runs an Obsidian command by ID.",
       cls: "setting-item-description"
     });
     const launcherButtonsEl = containerEl.createDiv();

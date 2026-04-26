@@ -11,46 +11,46 @@ const en = {
     reset: "Reset to default",
     save: "Save",
     unknown: "Unknown",
-    noLabel: "(no label)",
+    noLabel: "no label",
     confirm: "Confirm",
   },
 
   panel: {
-    title: "Action Deck",
-    empty: "Go to Settings > Action Deck to add launcher buttons.",
+    title: "ActionDeck",
+    empty: "Go to Settings > ActionDeck to add launcher buttons",
   },
 
   settings: {
-    title: "Action Deck",
+    title: "ActionDeck",
     desc: "A customizable sidebar launcher. Assign any Obsidian command to a button.",
 
     buttonSize: {
-      heading: "🔘 Button size",
-      sectionDesc: "Set the icon font size displayed on launcher buttons.",
+      heading: "Button size",
+      sectionDesc: "Set the icon font size displayed on launcher buttons",
       name: "Launcher icon size",
-      desc: "Font size (px) for icons on all launcher buttons. Default: 22",
+      desc: "Font size in pixels for icons on all launcher buttons. Default is 22",
     },
 
     groups: {
-      heading: "📂 Launcher groups",
-      sectionDesc: "Define groups to organize launcher buttons. Buttons will be displayed in group order.",
-      placeholder: "Group name...",
-      empty: "No groups yet. Add one below.",
-      warningEmpty: "Group name is empty.",
-      addBtn: "＋ Add group",
+      heading: "Launcher groups",
+      sectionDesc: "Define groups to organize launcher buttons",
+      placeholder: "Group name",
+      empty: "No groups yet. Add one below",
+      warningEmpty: "Group name is empty",
+      addBtn: "Add group",
       newGroup: "New group",
-      historyTooltip: "Recent deletions (restore)",
-      alreadyExists: '⚠️ "{name}" already exists',
+      historyTooltip: "Recent deletions",
+      alreadyExists: "{name} already exists",
     },
 
     buttons: {
-      heading: "🕹️ Launcher buttons",
-      sectionDesc: "Define individual launcher buttons. Each button runs an Obsidian command by ID.",
-      empty: "No buttons yet. Add one below.",
-      warningLabel: "Label or command ID is empty.",
-      addBtn: "＋ Add button",
-      historyTooltip: "Recent deletions (restore)",
-      alreadyExists: "⚠️ This button already exists",
+      heading: "Launcher buttons",
+      sectionDesc: "Define individual launcher buttons",
+      empty: "No buttons yet. Add one below",
+      warningLabel: "Label or command id is empty",
+      addBtn: "Add button",
+      historyTooltip: "Recent deletions",
+      alreadyExists: "This button already exists",
 
       // Field labels
       iconType: "Icon type",
@@ -58,53 +58,53 @@ const en = {
       label: "Label",
       group: "Group",
       iconColor: "Icon color",
-      commandId: "Command ID",
+      commandId: "Command id",
       ungrouped: "Ungrouped",
-      selectImage: "Select image...",
+      selectImage: "Select image",
 
       // Restore presets
-      restoreBtn: "↺ Restore presets",
+      restoreBtn: "Restore presets",
       restoredNotice: "Restored {count} preset items",
       noPresetsToRestore: "No presets to restore",
 
       // Icon types
-      typeText: "Text / emoji",
+      typeText: "Text or emoji",
       typeLucide: "Lucide",
-      typeImage: "Image (vault)",
-      typeImageUrl: "Image (URL)",
-      typeSvg: "SVG code",
+      typeImage: "Image in vault",
+      typeImageUrl: "Image from url",
+      typeSvg: "Svg code",
     },
   },
 
   history: {
-    title: "Deletion history: {name}",
-    clearBtn: "✕ Clear history",
-    clearConfirm: "Clear all deletion history for {name}?",
-    cleared: "✅ History cleared",
-    empty: "No items to restore.",
-    restored: "✅ Restored: {name}",
+    title: "Deletion history",
+    clearBtn: "Clear history",
+    clearConfirm: "Clear all deletion history for",
+    cleared: "History cleared",
+    empty: "No items to restore",
+    restored: "Restored",
   },
 
   notice: {
-    commandNotFound: "⚠️ Command not found: {id}",
-    launcherError: "❌ Launcher error: {msg}",
-    itemDeleted: "Item deleted.",
-    undo: "(Undo)",
-    undoRestored: "✅ Restored",
+    commandNotFound: "Command not found",
+    launcherError: "Launcher error",
+    itemDeleted: "Item deleted",
+    undo: "Undo",
+    undoRestored: "Restored",
   },
   modals: {
-    icon: { placeholder: "Search Lucide icon..." },
-    image: { placeholder: "Select image file (png, jpg, svg, webp...)" },
+    icon: { placeholder: "Search lucide icon" },
+    image: { placeholder: "Select image file" },
   },
 } as const;
 
 // Widen all string literal types to `string` so translation files (ja.ts etc.) can assign any string value
 type DeepString<T> = {
   [K in keyof T]: T[K] extends string
-    ? string
-    : T[K] extends object
-    ? DeepString<T[K]>
-    : T[K];
+  ? string
+  : T[K] extends object
+  ? DeepString<T[K]>
+  : T[K];
 };
 
 export type Locale = DeepString<typeof en>;

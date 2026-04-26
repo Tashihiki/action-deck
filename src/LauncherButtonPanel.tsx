@@ -1,5 +1,5 @@
 // =============================================================================
-// LauncherButtonPanel.tsx — Action Deck
+// LauncherButtonPanel.tsx — ActionDeck
 // =============================================================================
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { App, Notice, setIcon, setTooltip, normalizePath, TFile } from "obsidian";
@@ -73,7 +73,7 @@ export function LauncherIconRenderer({ macro, isRunning, plugin }: LauncherIconR
               style={{ maxWidth: "100%", maxHeight: "100%", width: "auto", height: "auto", minWidth: "1px", minHeight: "1px", objectFit: "contain", opacity: isRunning ? 0.3 : 1, transition: "opacity 0.2s ease" } as React.CSSProperties}
               onError={() => {
                 // eslint-disable-next-line no-console
-                console.warn("Action Deck: Image load failed", { src, label: macro.label });
+                console.warn("ActionDeck: Image load failed", { src, label: macro.label });
                 setHasError(true);
               }}
             />
@@ -125,7 +125,7 @@ export function LauncherButtonPanel({ app, plugin }: Props) {
 
   const handleLauncher = useCallback((macro: LauncherButtonConfig) => {
     if (runningCmd) return;
-    
+
     // Use the first action's command ID as the "running" state indicator
     const firstAction = macro.actions.find(a => a.triggerId === "");
     const runningIndicator = firstAction?.commandId || "running";
@@ -138,7 +138,7 @@ export function LauncherButtonPanel({ app, plugin }: Props) {
       }
 
       const commands = (app as import("./types").ObsidianApp).commands;
-      
+
       for (const action of macro.actions) {
         if (!action.commandId) continue;
         // Only run actions with empty triggerId for now
@@ -146,13 +146,13 @@ export function LauncherButtonPanel({ app, plugin }: Props) {
 
         const success = commands.executeCommandById(action.commandId);
         if (!success) {
-          new Notice(`⚠️ Command not found: ${action.commandId}`);
+          new Notice(`⚠️ ${t("notice.commandNotFound")}: ${action.commandId}`);
           break; // Stop sequential execution on failure
         }
       }
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : String(e);
-      new Notice(`❌ Launcher error: ${msg}`);
+      new Notice(`❌ ${t("notice.launcherError")}: ${msg}`);
     } finally {
       if (timeoutRef.current !== null) { window.clearTimeout(timeoutRef.current); }
       timeoutRef.current = window.setTimeout(() => setRunningCmd(null), 200);
@@ -240,7 +240,7 @@ export function LauncherButtonPanel({ app, plugin }: Props) {
             })}
           </div>
         ) : (
-          <p className="ll-empty">{t("panel.empty")}</p>
+          <p className="ll-empty">{t("panel.empty")}.</p>
         )}
       </div>
     </div>
