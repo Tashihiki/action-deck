@@ -66,9 +66,7 @@ export default class ActionDeckPlugin extends Plugin implements IActionDeckPlugi
     this.addSettingTab(new ActionDeckSettingTab(this.app, this));
   }
 
-  async onunload() {
-    this.app.workspace.detachLeavesOfType(VIEW_TYPE_LAUNCHER_BUTTON);
-  }
+
 
   async loadSettings() {
     const data = await this.loadData();
