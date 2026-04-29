@@ -4,6 +4,24 @@ A customizable sidebar launcher for [Obsidian](https://obsidian.md) that lets yo
 
 Organize your most-used commands into a tidy panel on the right sidebar — no more digging through the command palette.
 
+|          Desktop View          |            Mobile View             |
+| :----------------------------: | :--------------------------------: |
+| <img src="pc.png" width="700"> | <img src="mobile.png" width="250"> |
+
+*Note: Screenshots show an upcoming version featuring the Reading Panel.*
+
+---
+
+## Why ActionDeck?
+
+Most Obsidian workflows assume a keyboard-first environment.
+ActionDeck was built for users who prefer GUI-driven interaction — 
+especially on mobile, where command palettes and shortcuts 
+create unnecessary friction.
+
+Born from a personal need to reduce cognitive load, 
+ActionDeck turns any Obsidian command into a single tap.
+
 ---
 
 ## Features
@@ -49,7 +67,7 @@ Organize your most-used commands into a tidy panel on the right sidebar — no m
 
 ### Finding a Command ID
 
-Open the command palette (`Ctrl/Cmd + P`), find the command you want, then check its ID in **Settings → ActionDeck → Command ID** field — the autocomplete suggest will help you find it by name.
+You don't need to memorize Command IDs. In **Settings → ActionDeck**, simply start typing the name of the command in the Command ID field. The autocomplete feature will help you find and select the correct ID.
 
 ### Grouping buttons
 
@@ -77,6 +95,17 @@ Open the command palette (`Ctrl/Cmd + P`), find the command you want, then check
 | **Group**        | The group this button belongs to (optional)                          |
 | **Icon Color**   | CSS color value for the icon                                         |
 | **Command ID**   | The Obsidian command to execute (autocomplete supported)             |
+
+---
+
+## Roadmap
+
+- [x] Basic launcher functionality and icon customization
+- [x] Group organization and deletion history
+- [ ] **Reading Panel integration** (Shown in screenshots)
+- [ ] **Advanced Settings Dashboard** (Centralized UI for managing modules)
+- [ ] **Automation & Triggers** (Event-driven action execution)
+- [ ] **Action Deck Utilities** (Execute specific workflows managed within the plugin)
 
 ---
 
