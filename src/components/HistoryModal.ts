@@ -29,7 +29,7 @@ export class HistoryModal extends Modal {
     titleContainer.createEl("h2", { text: t("history.title") + ": " + this.sectionName });
 
     const clearBtn = header.createEl("button", { text: "✕ " + t("history.clearBtn"), cls: "ll-history-clear-btn" });
-    clearBtn.onclick = () => {
+    clearBtn.addEventListener("click", () => {
       new GenericConfirmModal(
         this.app,
         "✕ " + t("history.clearBtn"),
@@ -43,7 +43,7 @@ export class HistoryModal extends Modal {
         t("common.confirm"),
         t("common.cancel")
       ).open();
-    };
+    });
 
     const historyList = this.plugin.historyManager.getHistory(this.sectionId);
     if (historyList.length === 0) {
@@ -71,7 +71,7 @@ export class HistoryModal extends Modal {
 
       const right = row.createDiv();
       const restoreBtn = right.createEl("button", { text: t("common.restore") });
-      restoreBtn.onclick = async () => {
+      restoreBtn.addEventListener("click", async () => {
         const queryId = item.id || (item.timestamp ? item.timestamp.toString() : "");
         const takenItem = await this.plugin.historyManager.takeItem(this.sectionId, queryId);
         if (takenItem) {
@@ -79,7 +79,7 @@ export class HistoryModal extends Modal {
           new Notice("✅ " + t("history.restored") + ": " + itemName);
           this.render();
         }
-      };
+      });
     });
   }
 

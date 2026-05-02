@@ -110,7 +110,7 @@ export default class ActionDeckPlugin extends Plugin implements IActionDeckPlugi
         await leaf.setViewState({ type: VIEW_TYPE_LAUNCHER_BUTTON, active: true });
       }
     }
-    if (leaf) workspace.revealLeaf(leaf);
+    if (leaf) await workspace.revealLeaf(leaf);
   }
 
   addLauncherButtonsToMenu(menu: Menu, _file?: obsidian.TAbstractFile) {

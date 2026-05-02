@@ -40,12 +40,12 @@ export class GenericConfirmModal extends obsidian.Modal {
     const btnContainer = contentEl.createDiv({ cls: "ll-modal-footer" });
 
     const cancelBtn = btnContainer.createEl("button", { text: this.cancelLabel });
-    cancelBtn.onclick = () => this.close();
+    cancelBtn.addEventListener("click", () => this.close());
 
     const confirmBtn = btnContainer.createEl("button", { text: this.confirmLabel, cls: "mod-warning" });
-    confirmBtn.onclick = () => {
+    confirmBtn.addEventListener("click", () => {
       this.onConfirm();
       this.close();
-    };
+    });
   }
 }

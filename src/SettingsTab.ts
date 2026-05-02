@@ -25,7 +25,7 @@ export class ActionDeckSettingTab extends PluginSettingTab implements ISettingsT
     frag.appendText(t("notice.itemDeleted") + ". ");
     const a = frag.createEl("a", { text: `(${t("notice.undo")})`, cls: "ll-undo-link" });
     let restored = false;
-    a.onclick = async () => {
+    a.addEventListener("click", async () => {
       if (restored) return;
       const latest = await this.plugin.historyManager.pop(sectionId);
       if (latest) {
@@ -36,7 +36,7 @@ export class ActionDeckSettingTab extends PluginSettingTab implements ISettingsT
         new Notice("✅ " + t("notice.undoRestored"));
         restored = true;
       }
-    };
+    });
     new Notice(frag, 5000);
   }
 

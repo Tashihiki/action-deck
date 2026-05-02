@@ -43,33 +43,33 @@ export function renderSection_LauncherGroups(tab: ISettingsTab, containerEl: HTM
       upBtn.disabled = idx === 0;
       downBtn.disabled = idx === groups.length - 1;
 
-      upBtn.onclick = async () => {
+      upBtn.addEventListener("click", async () => {
         [groups[idx], groups[idx - 1]] = [groups[idx - 1], groups[idx]];
         await tab.plugin.saveSettings();
         renderGroupList();
         if (refresh) refresh();
-      };
-      downBtn.onclick = async () => {
+      });
+      downBtn.addEventListener("click", async () => {
         [groups[idx], groups[idx + 1]] = [groups[idx + 1], groups[idx]];
         await tab.plugin.saveSettings();
         renderGroupList();
         if (refresh) refresh();
-      };
+      });
 
       const delBtn = rightHeader.createEl("button", { text: "✕", cls: "ll-settings-launcher-del" });
-      delBtn.onclick = async () => {
+      delBtn.addEventListener("click", async () => {
         await tab.handleItemDeletion("launcherGroups", groups, idx, () => {
           void tab.plugin.saveSettings().then(() => {
             renderGroupList();
             if (refresh) refresh();
           });
         });
-      };
+      });
 
-      nameInput.oninput = () => {
+      nameInput.addEventListener("input", () => {
         warningIcon.toggle(!nameInput.value.trim());
-      };
-      nameInput.onchange = async () => {
+      });
+      nameInput.addEventListener("change", async () => {
         const newName = nameInput.value.trim();
         if (newName && newName !== groupName) {
           if (groupName !== "") {
@@ -86,7 +86,7 @@ export function renderSection_LauncherGroups(tab: ISettingsTab, containerEl: HTM
           renderGroupList();
           if (refresh) refresh();
         }
-      };
+      });
     });
   };
 
@@ -214,38 +214,38 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
 
       const rightHeader = header.createDiv({ cls: "ll-setting-row-header" });
 
-      const stopPropagation = (fn: () => void) => (e: Event) => { e.stopPropagation(); fn(); };
+      const stopPropagation = (fn: () => void | Promise<void>) => (e: Event) => { e.stopPropagation(); void fn(); };
 
       const upBtn = rightHeader.createEl("button", { text: "▲", cls: "ll-settings-launcher-sort-btn" });
       const downBtn = rightHeader.createEl("button", { text: "▼", cls: "ll-settings-launcher-sort-btn" });
       upBtn.disabled = idx === 0;
       downBtn.disabled = idx === launcherButtons.length - 1;
 
-      upBtn.onclick = stopPropagation(async () => {
+      upBtn.addEventListener("click", stopPropagation(async () => {
         [launcherButtons[idx], launcherButtons[idx - 1]] = [launcherButtons[idx - 1], launcherButtons[idx]];
         await tab.plugin.saveSettings();
         renderLauncherButtonList();
-      });
-      downBtn.onclick = stopPropagation(async () => {
+      }));
+      downBtn.addEventListener("click", stopPropagation(async () => {
         [launcherButtons[idx], launcherButtons[idx + 1]] = [launcherButtons[idx + 1], launcherButtons[idx]];
         await tab.plugin.saveSettings();
         renderLauncherButtonList();
-      });
+      }));
 
       const delBtn = rightHeader.createEl("button", { text: "✕", cls: "ll-settings-launcher-del" });
-      delBtn.onclick = stopPropagation(async () => {
+      delBtn.addEventListener("click", stopPropagation(async () => {
         await tab.handleItemDeletion("launcherButtons", launcherButtons, idx, () => {
           void tab.plugin.saveSettings().then(() => {
             renderLauncherButtonList();
           });
         });
-      });
+      }));
 
-      header.onclick = () => {
+      header.addEventListener("click", () => {
         if (isOpen) tab.openLauncherButtons.delete(btn.id);
         else tab.openLauncherButtons.add(btn.id);
         renderLauncherButtonList();
-      };
+      });
 
       if (!isOpen) return;
 
@@ -317,79 +317,79 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
           ta.value = btn.icon || "";
           ta.addClass("ll-setting-textarea-fix"); // height 80px
           ta.placeholder = "<svg>...</svg>";
-          ta.oninput = () => {
+          ta.addEventListener("input", () => {
             // 入力中はプレビューを更新しない
-          };
-          ta.onchange = async () => {
+          });
+          ta.addEventListener("change", async () => {
             btn.icon = ta.value.trim();
             await tab.plugin.saveSettings();
             refreshLargePreview();
             refreshHeaderPreview();
-          };
+          });
         } else {
           const input = inputRow.createEl("input", { type: "text", value: btn.icon, cls: ["ll-settings-launcher-input", "ll-flex-grow"] });
           input.placeholder = type === "image-url" ? "https://example.com/icon.png" : "";
-          input.oninput = () => {
+          input.addEventListener("input", () => {
             // 入力中はプレビューを更新しない
-          };
-          input.onchange = async () => {
+          });
+          input.addEventListener("change", async () => {
             btn.icon = input.value.trim();
             await tab.plugin.saveSettings();
             refreshLargePreview();
             refreshHeaderPreview();
-          };
+          });
           if (type === "image") {
             input.hide();
             const selectBtn = inputRow.createEl("button", { 
               text: t("settings.buttons.selectImage") + "...",
               cls: "ll-flex-grow"
             });
-            selectBtn.onclick = () => {
+            selectBtn.addEventListener("click", () => {
               new ImageSuggestModal(tab.app, (file) => {
                 btn.icon = file.path; input.value = file.path;
                 void tab.plugin.saveSettings().then(() => {
                   refreshLargePreview(); refreshHeaderPreview();
                 });
               }).open();
-            };
+            });
           } else if (type === "lucide") {
             const pickBtn = inputRow.createEl("button", { text: "🔎" });
-            pickBtn.onclick = () => {
+            pickBtn.addEventListener("click", () => {
               new IconSuggestModal(tab.app, (selected) => {
                 btn.icon = selected; input.value = selected;
                 void tab.plugin.saveSettings().then(() => {
                   refreshLargePreview(); refreshHeaderPreview();
                 });
               }).open();
-            };
+            });
           }
         }
       };
       renderIconInputFields();
 
-      typeSelect.onchange = async () => {
+      typeSelect.addEventListener("change", async () => {
         btn.type = typeSelect.value as import("../../types").LauncherButtonConfig["type"];
         btn.icon = "";
         await tab.plugin.saveSettings();
         renderIconInputFields();
         refreshLargePreview();
         refreshHeaderPreview();
-      };
+      });
 
       const fieldGrid = rightSide.createDiv({ cls: "ll-setting-grid-equal" });
 
       const labelCont = fieldGrid.createDiv();
       labelCont.createDiv({ text: t("settings.buttons.label"), cls: "setting-item-description" });
       const labelInp = labelCont.createEl("input", { type: "text", value: btn.label, cls: ["ll-settings-launcher-input", "ll-width-full"] });
-      labelInp.oninput = () => {
+      labelInp.addEventListener("input", () => {
         // 入力中はラベル表示を更新しない
-      };
-      labelInp.onchange = async () => {
+      });
+      labelInp.addEventListener("change", async () => {
         btn.label = labelInp.value.trim();
         labelText.setText(btn.label || `(${t("common.noLabel")})`);
         updateWarningVisible();
         await tab.plugin.saveSettings();
-      };
+      });
 
       const groupCont = fieldGrid.createDiv();
       groupCont.createDiv({ text: t("settings.buttons.group"), cls: "setting-item-description" });
@@ -401,34 +401,34 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
         const o = groupSel.createEl("option", { text: g, value: g });
         if (g === btn.launcherGroup) o.selected = true;
       });
-      groupSel.onchange = async () => { btn.launcherGroup = groupSel.value; await tab.plugin.saveSettings(); renderLauncherButtonList(); };
+      groupSel.addEventListener("change", async () => { btn.launcherGroup = groupSel.value; await tab.plugin.saveSettings(); renderLauncherButtonList(); });
 
       const colorCont = fieldGrid.createDiv();
       colorCont.createDiv({ text: t("settings.buttons.iconColor"), cls: "setting-item-description" });
       const colorRow = colorCont.createDiv({ cls: "ll-setting-row-header" });
       const colorInp = colorRow.createEl("input", { type: "text", value: btn.iconColor || "", cls: ["ll-settings-launcher-input", "ll-flex-grow"] });
       const colorPick = colorRow.createEl("input", { type: "color", value: btn.iconColor || "#000000" });
-      colorInp.oninput = () => {
+      colorInp.addEventListener("input", () => {
         const val = colorInp.value.trim();
         if (val.startsWith("#") && val.length >= 7) colorPick.value = val.slice(0, 7);
         // プレビューは更新しない
-      };
-      colorInp.onchange = async () => { 
+      });
+      colorInp.addEventListener("change", async () => { 
         btn.iconColor = colorInp.value.trim();
         await tab.plugin.saveSettings();
         refreshLargePreview();
         refreshHeaderPreview();
-      };
-      colorPick.oninput = () => {
+      });
+      colorPick.addEventListener("input", () => {
         colorInp.value = colorPick.value;
         // プレビューは更新しない
-      };
-      colorPick.onchange = async () => { 
+      });
+      colorPick.addEventListener("change", async () => { 
         btn.iconColor = colorPick.value;
         await tab.plugin.saveSettings();
         refreshLargePreview();
         refreshHeaderPreview();
-      };
+      });
 
       const cmdCont = body.createDiv();
       cmdCont.createDiv({ text: t("settings.buttons.commandId"), cls: "setting-item-description" });
@@ -437,15 +437,15 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
       
       const cmdInp = cmdCont.createEl("input", { type: "text", value: firstAction.commandId || "", cls: ["ll-settings-launcher-input", "ll-width-full"] });
       new CommandSuggest(tab.app, cmdInp);
-      cmdInp.oninput = () => {
+      cmdInp.addEventListener("input", () => {
         updateWarningVisible();
-      };
-      cmdInp.onchange = async () => {
+      });
+      cmdInp.addEventListener("change", async () => {
         if (!btn.actions) btn.actions = [];
         if (btn.actions.length === 0) btn.actions.push({ commandId: "", triggerId: "" });
         btn.actions[0].commandId = cmdInp.value.trim();
         await tab.plugin.saveSettings();
-      };
+      });
 
       // showInContextMenu is reserved for future use
     });
@@ -494,7 +494,7 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
 
   const resetRow = containerEl.createDiv({ cls: "ll-setting-footer" });
   const restorePresetBtn = resetRow.createEl("button", { text: "↺ " + t("settings.buttons.restoreBtn"), cls: "mod-cta" });
-  restorePresetBtn.onclick = async () => {
+  restorePresetBtn.addEventListener("click", async () => {
     const settings = tab.plugin.settings;
     const missingButtons = DEFAULT_SETTINGS.launcherButtons.filter(db => !settings.launcherButtons.some(cb => cb.id === db.id));
     const missingGroups = (DEFAULT_SETTINGS.launcherGroups || []).filter(dg => !settings.launcherGroups.includes(dg));
@@ -512,6 +512,6 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
     } else {
       new Notice(t("settings.buttons.noPresetsToRestore"));
     }
-  };
+  });
 }
 
