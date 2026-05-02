@@ -34,10 +34,11 @@ export class HistoryModal extends Modal {
         this.app,
         "✕ " + t("history.clearBtn"),
         t("history.clearConfirm") + " " + this.sectionName + "?",
-        async () => {
-          await this.plugin.historyManager.clear(this.sectionId);
-          new Notice("✅ " + t("history.cleared"));
-          this.render();
+        () => {
+          void this.plugin.historyManager.clear(this.sectionId).then(() => {
+            new Notice("✅ " + t("history.cleared"));
+            this.render();
+          });
         },
         t("common.confirm"),
         t("common.cancel")

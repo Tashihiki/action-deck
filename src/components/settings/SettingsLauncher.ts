@@ -58,10 +58,11 @@ export function renderSection_LauncherGroups(tab: ISettingsTab, containerEl: HTM
 
       const delBtn = rightHeader.createEl("button", { text: "✕", cls: "ll-settings-launcher-del" });
       delBtn.onclick = async () => {
-        await tab.handleItemDeletion("launcherGroups", groups, idx, async () => {
-          await tab.plugin.saveSettings();
-          renderGroupList();
-          if (refresh) refresh();
+        await tab.handleItemDeletion("launcherGroups", groups, idx, () => {
+          void tab.plugin.saveSettings().then(() => {
+            renderGroupList();
+            if (refresh) refresh();
+          });
         });
       };
 
@@ -113,11 +114,12 @@ export function renderSection_LauncherGroups(tab: ISettingsTab, containerEl: HTM
     .addButton(btn => btn
       .setButtonText("＋ " + t("settings.groups.addBtn"))
       .setCta()
-      .onClick(async () => {
+      .onClick(() => {
         settings.launcherGroups.push(t("settings.groups.newGroup"));
-        await tab.plugin.saveSettings();
-        renderGroupList();
-        if (refresh) refresh();
+        void tab.plugin.saveSettings().then(() => {
+          renderGroupList();
+          if (refresh) refresh();
+        });
       })
     );
 }
@@ -232,9 +234,10 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
 
       const delBtn = rightHeader.createEl("button", { text: "✕", cls: "ll-settings-launcher-del" });
       delBtn.onclick = stopPropagation(async () => {
-        await tab.handleItemDeletion("launcherButtons", launcherButtons, idx, async () => {
-          await tab.plugin.saveSettings();
-          renderLauncherButtonList();
+        await tab.handleItemDeletion("launcherButtons", launcherButtons, idx, () => {
+          void tab.plugin.saveSettings().then(() => {
+            renderLauncherButtonList();
+          });
         });
       });
 
@@ -342,17 +345,21 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
               cls: "ll-flex-grow"
             });
             selectBtn.onclick = () => {
-              new ImageSuggestModal(tab.app, async (file) => {
+              new ImageSuggestModal(tab.app, (file) => {
                 btn.icon = file.path; input.value = file.path;
-                await tab.plugin.saveSettings(); refreshLargePreview(); refreshHeaderPreview();
+                void tab.plugin.saveSettings().then(() => {
+                  refreshLargePreview(); refreshHeaderPreview();
+                });
               }).open();
             };
           } else if (type === "lucide") {
             const pickBtn = inputRow.createEl("button", { text: "🔎" });
             pickBtn.onclick = () => {
-              new IconSuggestModal(tab.app, async (selected) => {
+              new IconSuggestModal(tab.app, (selected) => {
                 btn.icon = selected; input.value = selected;
-                await tab.plugin.saveSettings(); refreshLargePreview(); refreshHeaderPreview();
+                void tab.plugin.saveSettings().then(() => {
+                  refreshLargePreview(); refreshHeaderPreview();
+                });
               }).open();
             };
           }
@@ -467,7 +474,7 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
     .addButton(btn => btn
       .setButtonText("＋ " + t("settings.buttons.addBtn"))
       .setCta()
-      .onClick(async () => {
+      .onClick(() => {
         const newId = "m-" + Date.now() + "-" + Math.random().toString(36).substring(2, 5);
         tab.plugin.settings.launcherButtons.push({ 
           id: newId, 
@@ -479,8 +486,9 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
           iconColor: "" 
         });
         tab.openLauncherButtons.add(newId);
-        await tab.plugin.saveSettings();
-        tab.renderSection_LauncherButtons(containerEl);
+        void tab.plugin.saveSettings().then(() => {
+          tab.renderSection_LauncherButtons(containerEl);
+        });
       })
     );
 

@@ -71,7 +71,7 @@ export class ActionDeckSettingTab extends PluginSettingTab implements ISettingsT
       )
       .addExtraButton(btn => btn
         .setIcon("reset").setTooltip(t("common.reset"))
-        .onClick(async () => { this.plugin.settings.launcherIconSize = 22; await this.plugin.saveSettings(); this.display(); })
+        .onClick(() => { this.plugin.settings.launcherIconSize = 22; void this.plugin.saveSettings().then(() => this.display()); })
       );
 
     // ─── Launcher Groups ─────────────────────────────────────────

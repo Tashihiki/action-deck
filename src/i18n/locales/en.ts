@@ -17,7 +17,7 @@ const en = {
 
   panel: {
     title: "ActionDeck",
-    empty: "Go to Settings > ActionDeck to add launcher buttons",
+    empty: "Go to settings > ActionDeck to add launcher buttons",
   },
 
   settings: {

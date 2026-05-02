@@ -46,7 +46,7 @@ export default class ActionDeckPlugin extends Plugin implements IActionDeckPlugi
 
     // Ribbon icon
     this.addRibbonIcon("layout-grid", "Action deck", () => {
-      this.activateLauncherButtonView();
+      void this.activateLauncherButtonView();
     });
 
     // Open the panel once the workspace layout is ready
@@ -60,7 +60,7 @@ export default class ActionDeckPlugin extends Plugin implements IActionDeckPlugi
     this.addCommand({
       id: "open-launcher-panel",
       name: "Open launcher panel",
-      callback: () => this.activateLauncherButtonView(),
+      callback: () => { void this.activateLauncherButtonView(); },
     });
 
     this.addSettingTab(new ActionDeckSettingTab(this.app, this));

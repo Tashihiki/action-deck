@@ -24,7 +24,7 @@ export class ImageSuggestModal extends FuzzySuggestModal<TFile> {
     const preview = container.createDiv({ cls: "ll-image-suggest-preview" });
 
     if (file.extension.toLowerCase() === "svg") {
-      this.app.vault.read(file).then(content => {
+      void this.app.vault.read(file).then(content => {
         setSanitizedSVG(preview, content);
       });
     } else {
