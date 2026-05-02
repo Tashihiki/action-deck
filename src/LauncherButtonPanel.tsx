@@ -32,27 +32,18 @@ export function LauncherIconRenderer({ macro, isRunning, plugin }: LauncherIconR
 
   const iconStyle: React.CSSProperties = {
     color: macro.iconColor || "inherit",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    height: "100%",
     opacity: isRunning ? 0.3 : 1,
-    transition: "opacity 0.2s ease",
-    pointerEvents: "none",
-    whiteSpace: "nowrap",
-    lineHeight: 0
   };
 
   const renderIcon = () => {
     try {
       switch (macro.type) {
         case "lucide":
-          return <div ref={iconRef} style={iconStyle} />;
+          return <div ref={iconRef} style={iconStyle} className="ll-icon-renderer" />;
         case "image":
         case "image-url": {
-          if (!macro.icon) return <span style={iconStyle}>🖼️</span>;
-          if (hasError) return <span style={{ ...iconStyle, fontSize: "0.5em" }}>❌</span>;
+          if (!macro.icon) return <span className="ll-icon-renderer" style={iconStyle}>🖼️</span>;
+          if (hasError) return <span className="ll-icon-renderer" style={{ ...iconStyle, fontSize: "0.5em" }}>❌</span>;
           let src = macro.icon;
           if (macro.type === "image" && !src.startsWith("http") && !src.startsWith("data:")) {
             try {
@@ -68,7 +59,8 @@ export function LauncherIconRenderer({ macro, isRunning, plugin }: LauncherIconR
           }
           return (
             <img src={src} alt={macro.label} loading="lazy" decoding="async"
-              style={{ maxWidth: "100%", maxHeight: "100%", width: "auto", height: "auto", minWidth: "1px", minHeight: "1px", objectFit: "contain", opacity: isRunning ? 0.3 : 1, transition: "opacity 0.2s ease" } as React.CSSProperties}
+              className="ll-icon-image"
+              style={{ opacity: isRunning ? 0.3 : 1 } as React.CSSProperties}
               onError={() => {
                 setHasError(true);
               }}
@@ -76,21 +68,21 @@ export function LauncherIconRenderer({ macro, isRunning, plugin }: LauncherIconR
           );
         }
         case "svg":
-          return <div ref={iconRef} style={iconStyle} className="ll-launcher-svg-container" />;
+          return <div ref={iconRef} style={iconStyle} className="ll-icon-renderer ll-launcher-svg-container" />;
         case "text":
         default:
-          return <span style={iconStyle}>{macro.icon || "?"}</span>;
+          return <span className="ll-icon-renderer" style={iconStyle}>{macro.icon || "?"}</span>;
       }
     } catch {
-      return <span style={iconStyle}>⚠️</span>;
+      return <span className="ll-icon-renderer" style={iconStyle}>⚠️</span>;
     }
   };
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div className="ll-icon-container">
       {renderIcon()}
       {isRunning && (
-        <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: macro.iconColor || "var(--text-accent)", fontSize: "1.2em", animation: "ll-spin 1s linear infinite", zIndex: 1 }}>
+        <div className="ll-icon-running-overlay" style={{ color: macro.iconColor || "var(--text-accent)" }}>
           ⟳
         </div>
       )}
@@ -192,7 +184,7 @@ export function LauncherButtonPanel({ app, plugin }: Props) {
         aria-label={btn.label}
         data-tooltip-position="top"
       >
-        <div className={`ll-launcher-icon ll-type-${btn.type || "text"}`} style={{ pointerEvents: "none" }}>
+        <div className={`ll-launcher-icon ll-type-${btn.type || "text"}`}>
           <LauncherIconRenderer macro={btn} isRunning={isRunning} plugin={plugin} />
         </div>
       </button>

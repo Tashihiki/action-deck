@@ -29,12 +29,11 @@ export function renderSection_LauncherGroups(tab: ISettingsTab, containerEl: HTM
     groups.forEach((groupName, idx) => {
       const row = groupListEl.createDiv({ cls: "ll-settings-launcher-row" });
 
-      const nameInput = row.createEl("input", { type: "text", value: groupName, cls: "ll-settings-launcher-label-input" });
+      const nameInput = row.createEl("input", { type: "text", value: groupName, cls: ["ll-settings-launcher-label-input", "ll-flex-grow"] });
       nameInput.placeholder = t("settings.groups.placeholder") + "...";
-      nameInput.style.flex = "1";
 
       const warningIcon = row.createSpan({ text: "⚠️" });
-      warningIcon.style.display = groupName.trim() ? "none" : "inline";
+      warningIcon.toggle(!groupName.trim());
       warningIcon.title = t("settings.groups.warningEmpty") + ".";
 
       const rightHeader = row.createDiv({ cls: "ll-setting-row-header" });
@@ -67,7 +66,7 @@ export function renderSection_LauncherGroups(tab: ISettingsTab, containerEl: HTM
       };
 
       nameInput.oninput = () => {
-        warningIcon.style.display = nameInput.value.trim() ? "none" : "inline";
+        warningIcon.toggle(!nameInput.value.trim());
       };
       nameInput.onchange = async () => {
         const newName = nameInput.value.trim();
@@ -144,34 +143,31 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
 
       const header = row.createDiv({ cls: ["ll-setting-flex-header", "ll-clickable-header"] });
 
-      const leftHeader = header.createDiv({ cls: "ll-setting-row-header" });
-      leftHeader.style.alignItems = "center";
-      leftHeader.style.gap = "12px";
+      const leftHeader = header.createDiv({ cls: ["ll-setting-row-header", "ll-setting-gap-12"] });
 
-      const toggleIcon = leftHeader.createSpan({ text: isOpen ? "▼" : "▶" });
-      toggleIcon.style.fontSize = "0.8em";
-      toggleIcon.style.width = "16px";
-      toggleIcon.style.color = "var(--text-muted)";
+      leftHeader.createSpan({ 
+        text: isOpen ? "▼" : "▶", 
+        cls: "ll-setting-toggle-icon" 
+      });
 
       // Small icon preview
       const previewEl = leftHeader.createDiv({ cls: "ll-preview-box-small" });
 
       const refreshHeaderPreview = (customIcon?: string, customColor?: string) => {
         previewEl.empty();
-        previewEl.style.backgroundColor = "var(--background-primary)";
-        const iconEl = previewEl.createDiv();
-        iconEl.style.width = "20px";
-        iconEl.style.height = "20px";
-        iconEl.style.display = "flex";
-        iconEl.style.alignItems = "center";
-        iconEl.style.justifyContent = "center";
-        iconEl.style.color = customColor || btn.iconColor || "var(--text-normal)";
+        const iconEl = previewEl.createDiv({ cls: "ll-setting-icon-preview" });
+        
+        // 動的な色はCSS変数経由で指定（ボット推奨のセット方法）
+        iconEl.setCssProps({
+          "--icon-color": customColor || btn.iconColor || "var(--text-normal)"
+        });
+
         const type = btn.type || "text";
         const iconValue = customIcon !== undefined ? customIcon : (btn.icon || "");
 
         if (type === "text") { 
           iconEl.setText(iconValue || "?"); 
-          iconEl.style.fontSize = "14px"; 
+          iconEl.addClass("ll-setting-icon-preview-text"); 
         }
         else if (type === "lucide") { 
           obsidian.setIcon(iconEl, iconValue || "help-circle"); 
@@ -188,52 +184,33 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
               }
             } catch { img.src = iconValue; }
           } else { img.src = iconValue; }
-          img.style.maxWidth = "100%";
-          img.style.maxHeight = "100%";
-          img.style.objectFit = "contain";
         } else if (type === "svg") {
           setSanitizedSVG(iconEl, iconValue || "");
-          const svg = iconEl.querySelector("svg");
-          if (svg) { svg.style.width = "100%"; svg.style.height = "100%"; }
         }
       };
       refreshHeaderPreview();
 
-      const infoText = leftHeader.createDiv();
-      infoText.style.display = "flex";
-      infoText.style.flexDirection = "column";
+      const infoText = leftHeader.createDiv({ cls: "ll-flex-column" });
 
-      const labelWrapper = infoText.createDiv();
-      labelWrapper.style.display = "flex";
-      labelWrapper.style.alignItems = "center";
-      labelWrapper.style.gap = "6px";
+      const labelWrapper = infoText.createDiv({ cls: "ll-setting-label-wrapper" });
 
-      const labelText = labelWrapper.createDiv({ text: btn.label || `(${t("common.noLabel")})` });
-      labelText.style.fontWeight = "bold";
-      labelText.style.fontSize = "13px";
-      const warningIcon = labelWrapper.createSpan({ text: "⚠️" });
-      warningIcon.style.cursor = "help";
+      const labelText = labelWrapper.createDiv({ 
+        text: btn.label || `(${t("common.noLabel")})`, 
+        cls: "ll-setting-label-text" 
+      });
+      const warningIcon = labelWrapper.createSpan({ text: "⚠️", cls: "ll-setting-warning-icon" });
       const updateWarningVisible = () => {
         const firstAction = btn.actions?.[0];
-        warningIcon.style.display = (btn.label?.trim() && firstAction?.commandId?.trim()) ? "none" : "inline";
+        warningIcon.toggle(!(btn.label?.trim() && firstAction?.commandId?.trim()));
       };
       updateWarningVisible();
       warningIcon.title = t("settings.buttons.warningLabel") + ".";
 
       if (btn.launcherGroup && tab.plugin.settings.launcherGroups.includes(btn.launcherGroup)) {
-        const groupTag = infoText.createDiv({ text: btn.launcherGroup });
-        groupTag.style.fontSize = "10px";
-        groupTag.style.color = "var(--text-muted)";
-        groupTag.style.background = "var(--background-primary-alt)";
-        groupTag.style.padding = "1px 4px";
-        groupTag.style.borderRadius = "3px";
-        groupTag.style.width = "fit-content";
-        groupTag.style.marginTop = "2px";
+        infoText.createDiv({ text: btn.launcherGroup, cls: "ll-setting-group-tag" });
       }
 
-      const rightHeader = header.createDiv();
-      rightHeader.style.display = "flex";
-      rightHeader.style.gap = "4px";
+      const rightHeader = header.createDiv({ cls: "ll-setting-row-header" });
 
       const stopPropagation = (fn: () => void) => (e: Event) => { e.stopPropagation(); fn(); };
 
@@ -270,23 +247,13 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
       if (!isOpen) return;
 
       // --- ボタン詳細 Body ---
-      const body = row.createDiv();
-      body.style.marginTop = "12px";
-      body.style.paddingTop = "12px";
-      body.style.borderTop = "1px solid var(--background-modifier-border)";
-      body.style.display = "flex";
-      body.style.flexDirection = "column";
-      body.style.gap = "12px";
+      const body = row.createDiv({ cls: "ll-setting-card-body" });
 
       const mainGrid = body.createDiv({ cls: "ll-setting-grid-2col" });
 
-      const leftSide = mainGrid.createDiv();
-      leftSide.style.display = "flex";
-      leftSide.style.flexDirection = "column";
-      leftSide.style.gap = "8px";
+      const leftSide = mainGrid.createDiv({ cls: "ll-setting-column" });
       leftSide.createDiv({ text: t("settings.buttons.iconType"), cls: "setting-item-description" });
-      const typeSelect = leftSide.createEl("select", { cls: "ll-settings-launcher-input" });
-      typeSelect.style.width = "100%";
+      const typeSelect = leftSide.createEl("select", { cls: ["ll-settings-launcher-input", "ll-setting-input-full"] });
       [{ val: "text", name: t("settings.buttons.typeText") }, { val: "lucide", name: t("settings.buttons.typeLucide") }, { val: "image", name: t("settings.buttons.typeImage") }, { val: "image-url", name: t("settings.buttons.typeImageUrl") }, { val: "svg", name: t("settings.buttons.typeSvg") }]
         .forEach(opt => {
           const o = typeSelect.createEl("option", { text: opt.name, value: opt.val });
@@ -298,20 +265,19 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
 
       const refreshLargePreview = (customIcon?: string, customColor?: string) => {
         largePreviewEl.empty();
-        largePreviewEl.style.backgroundColor = "var(--background-primary)";
-        const ic = largePreviewEl.createDiv();
-        ic.style.width = "32px";
-        ic.style.height = "32px";
-        ic.style.display = "flex";
-        ic.style.alignItems = "center";
-        ic.style.justifyContent = "center";
-        ic.style.color = customColor || btn.iconColor || "var(--text-normal)";
+        const ic = largePreviewEl.createDiv({ cls: "ll-setting-icon-large" });
+
+        // 動的な色はCSS変数で制御
+        ic.setCssProps({
+          "--icon-color": customColor || btn.iconColor || "var(--text-normal)"
+        });
+
         const type = btn.type || "text";
         const iconValue = customIcon !== undefined ? customIcon : (btn.icon || "");
 
         if (type === "text") { 
           ic.setText(iconValue || "?"); 
-          ic.style.fontSize = "24px"; 
+          ic.addClass("ll-setting-icon-large-text"); 
         }
         else if (type === "lucide") { 
           obsidian.setIcon(ic, iconValue || "help-circle"); 
@@ -328,36 +294,25 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
               }
             } catch { img.src = iconValue; }
           } else { img.src = iconValue; }
-          img.style.maxWidth = "100%";
-          img.style.maxHeight = "100%";
-          img.style.objectFit = "contain";
         } else if (type === "svg") {
           setSanitizedSVG(ic, iconValue || "");
-          const svg = ic.querySelector("svg");
-          if (svg) { svg.style.width = "100%"; svg.style.height = "100%"; }
         }
       };
       refreshLargePreview();
 
       // 右サイド
-      const rightSide = mainGrid.createDiv();
-      rightSide.style.display = "flex";
-      rightSide.style.flexDirection = "column";
-      rightSide.style.gap = "12px";
+      const rightSide = mainGrid.createDiv({ cls: ["ll-flex-column", "ll-setting-gap-12"] });
 
       const iconInputContainer = rightSide.createDiv();
       const renderIconInputFields = () => {
         iconInputContainer.empty();
         iconInputContainer.createDiv({ text: t("settings.buttons.iconContent"), cls: "setting-item-description" });
         const type = btn.type || "text";
-        const inputRow = iconInputContainer.createDiv();
-        inputRow.style.display = "flex";
-        inputRow.style.gap = "4px";
+        const inputRow = iconInputContainer.createDiv({ cls: "ll-setting-row-header" });
         if (type === "svg") {
-          const ta = inputRow.createEl("textarea", { cls: "ll-settings-launcher-input" });
+          const ta = inputRow.createEl("textarea", { cls: ["ll-settings-launcher-input", "ll-width-full"] });
           ta.value = btn.icon || "";
-          ta.style.width = "100%";
-          ta.style.height = "80px";
+          ta.addClass("ll-setting-textarea-fix"); // height 80px
           ta.placeholder = "<svg>...</svg>";
           ta.oninput = () => {
             // 入力中はプレビューを更新しない
@@ -369,8 +324,7 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
             refreshHeaderPreview();
           };
         } else {
-          const input = inputRow.createEl("input", { type: "text", value: btn.icon, cls: "ll-settings-launcher-input" });
-          input.style.flex = "1";
+          const input = inputRow.createEl("input", { type: "text", value: btn.icon, cls: ["ll-settings-launcher-input", "ll-flex-grow"] });
           input.placeholder = type === "image-url" ? "https://example.com/icon.png" : "";
           input.oninput = () => {
             // 入力中はプレビューを更新しない
@@ -382,9 +336,11 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
             refreshHeaderPreview();
           };
           if (type === "image") {
-            input.style.display = "none";
-            const selectBtn = inputRow.createEl("button", { text: t("settings.buttons.selectImage") + "..." });
-            selectBtn.style.flex = "1";
+            input.hide();
+            const selectBtn = inputRow.createEl("button", { 
+              text: t("settings.buttons.selectImage") + "...",
+              cls: "ll-flex-grow"
+            });
             selectBtn.onclick = () => {
               new ImageSuggestModal(tab.app, async (file) => {
                 btn.icon = file.path; input.value = file.path;
@@ -417,8 +373,7 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
 
       const labelCont = fieldGrid.createDiv();
       labelCont.createDiv({ text: t("settings.buttons.label"), cls: "setting-item-description" });
-      const labelInp = labelCont.createEl("input", { type: "text", value: btn.label, cls: "ll-settings-launcher-input" });
-      labelInp.style.width = "100%";
+      const labelInp = labelCont.createEl("input", { type: "text", value: btn.label, cls: ["ll-settings-launcher-input", "ll-width-full"] });
       labelInp.oninput = () => {
         // 入力中はラベル表示を更新しない
       };
@@ -431,8 +386,7 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
 
       const groupCont = fieldGrid.createDiv();
       groupCont.createDiv({ text: t("settings.buttons.group"), cls: "setting-item-description" });
-      const groupSel = groupCont.createEl("select", { cls: "ll-settings-launcher-input" });
-      groupSel.style.width = "100%";
+      const groupSel = groupCont.createEl("select", { cls: ["ll-settings-launcher-input", "ll-width-full"] });
       const optNone = groupSel.createEl("option", { text: t("settings.buttons.ungrouped"), value: "" });
       if (!btn.launcherGroup) optNone.selected = true;
       tab.plugin.settings.launcherGroups.forEach(g => {
@@ -444,11 +398,8 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
 
       const colorCont = fieldGrid.createDiv();
       colorCont.createDiv({ text: t("settings.buttons.iconColor"), cls: "setting-item-description" });
-      const colorRow = colorCont.createDiv();
-      colorRow.style.display = "flex";
-      colorRow.style.gap = "4px";
-      const colorInp = colorRow.createEl("input", { type: "text", value: btn.iconColor || "", cls: "ll-settings-launcher-input" });
-      colorInp.style.flex = "1";
+      const colorRow = colorCont.createDiv({ cls: "ll-setting-row-header" });
+      const colorInp = colorRow.createEl("input", { type: "text", value: btn.iconColor || "", cls: ["ll-settings-launcher-input", "ll-flex-grow"] });
       const colorPick = colorRow.createEl("input", { type: "color", value: btn.iconColor || "#000000" });
       colorInp.oninput = () => {
         const val = colorInp.value.trim();
@@ -477,8 +428,7 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
       const firstAction = btn.actions?.[0] || { commandId: "", triggerId: "" };
       if (!btn.actions) btn.actions = [firstAction];
       
-      const cmdInp = cmdCont.createEl("input", { type: "text", value: firstAction.commandId || "", cls: "ll-settings-launcher-input" });
-      cmdInp.style.width = "100%";
+      const cmdInp = cmdCont.createEl("input", { type: "text", value: firstAction.commandId || "", cls: ["ll-settings-launcher-input", "ll-width-full"] });
       new CommandSuggest(tab.app, cmdInp);
       cmdInp.oninput = () => {
         updateWarningVisible();
@@ -534,12 +484,7 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
       })
     );
 
-  const resetRow = containerEl.createDiv();
-  resetRow.style.marginTop = "32px";
-  resetRow.style.borderTop = "1px solid var(--background-modifier-border)";
-  resetRow.style.paddingTop = "20px";
-  resetRow.style.display = "flex";
-  resetRow.style.justifyContent = "flex-end";
+  const resetRow = containerEl.createDiv({ cls: "ll-setting-footer" });
   const restorePresetBtn = resetRow.createEl("button", { text: "↺ " + t("settings.buttons.restoreBtn"), cls: "mod-cta" });
   restorePresetBtn.onclick = async () => {
     const settings = tab.plugin.settings;

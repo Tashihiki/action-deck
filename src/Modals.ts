@@ -11,14 +11,10 @@ export class IconSuggestModal extends obsidian.FuzzySuggestModal<string> {
   getItemText(item: string): string { return item; }
   renderSuggestion(item: obsidian.FuzzyMatch<string>, el: HTMLElement): void {
     super.renderSuggestion(item, el);
-    const iconEl = document.createElement("div");
+    const iconEl = el.createDiv({ cls: "ll-icon-suggest-icon" });
     obsidian.setIcon(iconEl, item.item);
-    iconEl.style.width = "20px";
-    iconEl.style.height = "20px";
     el.prepend(iconEl);
-    el.style.display = "flex";
-    el.style.alignItems = "center";
-    el.style.gap = "10px";
+    el.addClass("ll-icon-suggest-item");
   }
   onChooseItem(item: string, _evt: MouseEvent | KeyboardEvent): void { this.onSelect(item); }
 }
