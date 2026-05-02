@@ -25,17 +25,19 @@ export class ActionDeckSettingTab extends PluginSettingTab implements ISettingsT
     frag.appendText(t("notice.itemDeleted") + ". ");
     const a = frag.createEl("a", { text: `(${t("notice.undo")})`, cls: "ll-undo-link" });
     let restored = false;
-    a.addEventListener("click", async () => {
+    a.addEventListener("click", () => {
       if (restored) return;
-      const latest = await this.plugin.historyManager.pop(sectionId);
-      if (latest) {
-        const insertIdx = Math.min(latest.index, list.length);
-        list.splice(insertIdx, 0, latest.data);
-        await this.plugin.saveSettings();
-        renderCallback();
-        new Notice("✅ " + t("notice.undoRestored"));
-        restored = true;
-      }
+      void (async () => {
+        const latest = await this.plugin.historyManager.pop(sectionId);
+        if (latest) {
+          const insertIdx = Math.min(latest.index, list.length);
+          list.splice(insertIdx, 0, latest.data);
+          await this.plugin.saveSettings();
+          renderCallback();
+          new Notice("✅ " + t("notice.undoRestored"));
+          restored = true;
+        }
+      })();
     });
     new Notice(frag, 5000);
   }

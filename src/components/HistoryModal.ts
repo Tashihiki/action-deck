@@ -71,14 +71,16 @@ export class HistoryModal extends Modal {
 
       const right = row.createDiv();
       const restoreBtn = right.createEl("button", { text: t("common.restore") });
-      restoreBtn.addEventListener("click", async () => {
-        const queryId = item.id || (item.timestamp ? item.timestamp.toString() : "");
-        const takenItem = await this.plugin.historyManager.takeItem(this.sectionId, queryId);
-        if (takenItem) {
-          await this.onRestore(takenItem);
-          new Notice("✅ " + t("history.restored") + ": " + itemName);
-          this.render();
-        }
+      restoreBtn.addEventListener("click", () => {
+        void (async () => {
+          const queryId = item.id || (item.timestamp ? item.timestamp.toString() : "");
+          const takenItem = await this.plugin.historyManager.takeItem(this.sectionId, queryId);
+          if (takenItem) {
+            await this.onRestore(takenItem);
+            new Notice("✅ " + t("history.restored") + ": " + itemName);
+            this.render();
+          }
+        })();
       });
     });
   }

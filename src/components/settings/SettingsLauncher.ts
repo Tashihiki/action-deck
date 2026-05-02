@@ -43,49 +43,57 @@ export function renderSection_LauncherGroups(tab: ISettingsTab, containerEl: HTM
       upBtn.disabled = idx === 0;
       downBtn.disabled = idx === groups.length - 1;
 
-      upBtn.addEventListener("click", async () => {
-        [groups[idx], groups[idx - 1]] = [groups[idx - 1], groups[idx]];
-        await tab.plugin.saveSettings();
-        renderGroupList();
-        if (refresh) refresh();
+      upBtn.addEventListener("click", () => {
+        void (async () => {
+          [groups[idx], groups[idx - 1]] = [groups[idx - 1], groups[idx]];
+          await tab.plugin.saveSettings();
+          renderGroupList();
+          if (refresh) refresh();
+        })();
       });
-      downBtn.addEventListener("click", async () => {
-        [groups[idx], groups[idx + 1]] = [groups[idx + 1], groups[idx]];
-        await tab.plugin.saveSettings();
-        renderGroupList();
-        if (refresh) refresh();
+      downBtn.addEventListener("click", () => {
+        void (async () => {
+          [groups[idx], groups[idx + 1]] = [groups[idx + 1], groups[idx]];
+          await tab.plugin.saveSettings();
+          renderGroupList();
+          if (refresh) refresh();
+        })();
       });
 
       const delBtn = rightHeader.createEl("button", { text: "✕", cls: "ll-settings-launcher-del" });
-      delBtn.addEventListener("click", async () => {
-        await tab.handleItemDeletion("launcherGroups", groups, idx, () => {
-          void tab.plugin.saveSettings().then(() => {
-            renderGroupList();
-            if (refresh) refresh();
+      delBtn.addEventListener("click", () => {
+        void (async () => {
+          await tab.handleItemDeletion("launcherGroups", groups, idx, () => {
+            void tab.plugin.saveSettings().then(() => {
+              renderGroupList();
+              if (refresh) refresh();
+            });
           });
-        });
+        })();
       });
 
       nameInput.addEventListener("input", () => {
         warningIcon.toggle(!nameInput.value.trim());
       });
-      nameInput.addEventListener("change", async () => {
-        const newName = nameInput.value.trim();
-        if (newName && newName !== groupName) {
-          if (groupName !== "") {
-            tab.plugin.settings.launcherButtons.forEach(m => {
-              if (m.launcherGroup === groupName) m.launcherGroup = newName;
-            });
+      nameInput.addEventListener("change", () => {
+        void (async () => {
+          const newName = nameInput.value.trim();
+          if (newName && newName !== groupName) {
+            if (groupName !== "") {
+              tab.plugin.settings.launcherButtons.forEach(m => {
+                if (m.launcherGroup === groupName) m.launcherGroup = newName;
+              });
+            }
+            groups[idx] = newName;
+            await tab.plugin.saveSettings();
+            renderGroupList();
+            if (refresh) refresh();
+          } else if (!newName) {
+            groups[idx] = "";
+            renderGroupList();
+            if (refresh) refresh();
           }
-          groups[idx] = newName;
-          await tab.plugin.saveSettings();
-          renderGroupList();
-          if (refresh) refresh();
-        } else if (!newName) {
-          groups[idx] = "";
-          renderGroupList();
-          if (refresh) refresh();
-        }
+        })();
       });
     });
   };
@@ -320,11 +328,13 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
           ta.addEventListener("input", () => {
             // 入力中はプレビューを更新しない
           });
-          ta.addEventListener("change", async () => {
-            btn.icon = ta.value.trim();
-            await tab.plugin.saveSettings();
-            refreshLargePreview();
-            refreshHeaderPreview();
+          ta.addEventListener("change", () => {
+            void (async () => {
+              btn.icon = ta.value.trim();
+              await tab.plugin.saveSettings();
+              refreshLargePreview();
+              refreshHeaderPreview();
+            })();
           });
         } else {
           const input = inputRow.createEl("input", { type: "text", value: btn.icon, cls: ["ll-settings-launcher-input", "ll-flex-grow"] });
@@ -332,11 +342,13 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
           input.addEventListener("input", () => {
             // 入力中はプレビューを更新しない
           });
-          input.addEventListener("change", async () => {
-            btn.icon = input.value.trim();
-            await tab.plugin.saveSettings();
-            refreshLargePreview();
-            refreshHeaderPreview();
+          input.addEventListener("change", () => {
+            void (async () => {
+              btn.icon = input.value.trim();
+              await tab.plugin.saveSettings();
+              refreshLargePreview();
+              refreshHeaderPreview();
+            })();
           });
           if (type === "image") {
             input.hide();
@@ -367,13 +379,15 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
       };
       renderIconInputFields();
 
-      typeSelect.addEventListener("change", async () => {
-        btn.type = typeSelect.value as import("../../types").LauncherButtonConfig["type"];
-        btn.icon = "";
-        await tab.plugin.saveSettings();
-        renderIconInputFields();
-        refreshLargePreview();
-        refreshHeaderPreview();
+      typeSelect.addEventListener("change", () => {
+        void (async () => {
+          btn.type = typeSelect.value as import("../../types").LauncherButtonConfig["type"];
+          btn.icon = "";
+          await tab.plugin.saveSettings();
+          renderIconInputFields();
+          refreshLargePreview();
+          refreshHeaderPreview();
+        })();
       });
 
       const fieldGrid = rightSide.createDiv({ cls: "ll-setting-grid-equal" });
@@ -384,11 +398,13 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
       labelInp.addEventListener("input", () => {
         // 入力中はラベル表示を更新しない
       });
-      labelInp.addEventListener("change", async () => {
-        btn.label = labelInp.value.trim();
-        labelText.setText(btn.label || `(${t("common.noLabel")})`);
-        updateWarningVisible();
-        await tab.plugin.saveSettings();
+      labelInp.addEventListener("change", () => {
+        void (async () => {
+          btn.label = labelInp.value.trim();
+          labelText.setText(btn.label || `(${t("common.noLabel")})`);
+          updateWarningVisible();
+          await tab.plugin.saveSettings();
+        })();
       });
 
       const groupCont = fieldGrid.createDiv();
@@ -401,7 +417,7 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
         const o = groupSel.createEl("option", { text: g, value: g });
         if (g === btn.launcherGroup) o.selected = true;
       });
-      groupSel.addEventListener("change", async () => { btn.launcherGroup = groupSel.value; await tab.plugin.saveSettings(); renderLauncherButtonList(); });
+      groupSel.addEventListener("change", () => { void (async () => { btn.launcherGroup = groupSel.value; await tab.plugin.saveSettings(); renderLauncherButtonList(); })(); });
 
       const colorCont = fieldGrid.createDiv();
       colorCont.createDiv({ text: t("settings.buttons.iconColor"), cls: "setting-item-description" });
@@ -413,21 +429,25 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
         if (val.startsWith("#") && val.length >= 7) colorPick.value = val.slice(0, 7);
         // プレビューは更新しない
       });
-      colorInp.addEventListener("change", async () => { 
-        btn.iconColor = colorInp.value.trim();
-        await tab.plugin.saveSettings();
-        refreshLargePreview();
-        refreshHeaderPreview();
+      colorInp.addEventListener("change", () => { 
+        void (async () => {
+          btn.iconColor = colorInp.value.trim();
+          await tab.plugin.saveSettings();
+          refreshLargePreview();
+          refreshHeaderPreview();
+        })();
       });
       colorPick.addEventListener("input", () => {
         colorInp.value = colorPick.value;
         // プレビューは更新しない
       });
-      colorPick.addEventListener("change", async () => { 
-        btn.iconColor = colorPick.value;
-        await tab.plugin.saveSettings();
-        refreshLargePreview();
-        refreshHeaderPreview();
+      colorPick.addEventListener("change", () => { 
+        void (async () => {
+          btn.iconColor = colorPick.value;
+          await tab.plugin.saveSettings();
+          refreshLargePreview();
+          refreshHeaderPreview();
+        })();
       });
 
       const cmdCont = body.createDiv();
@@ -440,11 +460,13 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
       cmdInp.addEventListener("input", () => {
         updateWarningVisible();
       });
-      cmdInp.addEventListener("change", async () => {
-        if (!btn.actions) btn.actions = [];
-        if (btn.actions.length === 0) btn.actions.push({ commandId: "", triggerId: "" });
-        btn.actions[0].commandId = cmdInp.value.trim();
-        await tab.plugin.saveSettings();
+      cmdInp.addEventListener("change", () => {
+        void (async () => {
+          if (!btn.actions) btn.actions = [];
+          if (btn.actions.length === 0) btn.actions.push({ commandId: "", triggerId: "" });
+          btn.actions[0].commandId = cmdInp.value.trim();
+          await tab.plugin.saveSettings();
+        })();
       });
 
       // showInContextMenu is reserved for future use
@@ -494,24 +516,26 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
 
   const resetRow = containerEl.createDiv({ cls: "ll-setting-footer" });
   const restorePresetBtn = resetRow.createEl("button", { text: "↺ " + t("settings.buttons.restoreBtn"), cls: "mod-cta" });
-  restorePresetBtn.addEventListener("click", async () => {
-    const settings = tab.plugin.settings;
-    const missingButtons = DEFAULT_SETTINGS.launcherButtons.filter(db => !settings.launcherButtons.some(cb => cb.id === db.id));
-    const missingGroups = (DEFAULT_SETTINGS.launcherGroups || []).filter(dg => !settings.launcherGroups.includes(dg));
+  restorePresetBtn.addEventListener("click", () => {
+    void (async () => {
+      const settings = tab.plugin.settings;
+      const missingButtons = DEFAULT_SETTINGS.launcherButtons.filter(db => !settings.launcherButtons.some(cb => cb.id === db.id));
+      const missingGroups = (DEFAULT_SETTINGS.launcherGroups || []).filter(dg => !settings.launcherGroups.includes(dg));
 
-    if (missingButtons.length > 0 || missingGroups.length > 0) {
-      if (missingButtons.length > 0) {
-        settings.launcherButtons.push(...(JSON.parse(JSON.stringify(missingButtons)) as import("../../types").LauncherButtonConfig[]));
+      if (missingButtons.length > 0 || missingGroups.length > 0) {
+        if (missingButtons.length > 0) {
+          settings.launcherButtons.push(...(JSON.parse(JSON.stringify(missingButtons)) as import("../../types").LauncherButtonConfig[]));
+        }
+        if (missingGroups.length > 0) {
+          settings.launcherGroups.push(...missingGroups);
+        }
+        await tab.plugin.saveSettings();
+        tab.renderSection_LauncherButtons(containerEl); // Refresh UI
+        new Notice(t("settings.buttons.restoredNotice", { count: (missingButtons.length + missingGroups.length).toString() }));
+      } else {
+        new Notice(t("settings.buttons.noPresetsToRestore"));
       }
-      if (missingGroups.length > 0) {
-        settings.launcherGroups.push(...missingGroups);
-      }
-      await tab.plugin.saveSettings();
-      tab.renderSection_LauncherButtons(containerEl); // Refresh UI
-      new Notice(t("settings.buttons.restoredNotice", { count: (missingButtons.length + missingGroups.length).toString() }));
-    } else {
-      new Notice(t("settings.buttons.noPresetsToRestore"));
-    }
+    })();
   });
 }
 
