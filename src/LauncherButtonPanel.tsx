@@ -60,7 +60,7 @@ export function LauncherIconRenderer({ macro, isRunning, plugin }: LauncherIconR
           return (
             <img src={src} alt={macro.label} loading="lazy" decoding="async"
               className="ll-icon-image"
-              style={{ opacity: isRunning ? 0.3 : 1 } as React.CSSProperties}
+              style={{ opacity: isRunning ? 0.3 : 1 }}
               onError={() => {
                 setHasError(true);
               }}
