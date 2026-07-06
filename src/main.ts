@@ -69,7 +69,7 @@ export default class ActionDeckPlugin extends Plugin implements IActionDeckPlugi
 
 
   async loadSettings() {
-    const data = await this.loadData();
+    const data = await this.loadData() as Partial<PluginSettings> | null;
     this.settings = Object.assign({}, DEFAULT_SETTINGS, data);
 
     if (this.settings.launcherButtons) {

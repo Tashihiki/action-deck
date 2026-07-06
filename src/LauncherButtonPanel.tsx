@@ -104,7 +104,7 @@ export function LauncherButtonPanel({ app, plugin }: Props) {
     const handleUpdate = () => setTick(t => t + 1);
     app.workspace.on("actiondeck:settings-updated" as unknown as "active-leaf-change", handleUpdate);
     return () => {
-      app.workspace.off("actiondeck:settings-updated" as unknown as "active-leaf-change", handleUpdate);
+      app.workspace.off("actiondeck:settings-updated", handleUpdate);
       if (timeoutRef.current !== null) { window.clearTimeout(timeoutRef.current); }
     };
   }, [app.workspace]);

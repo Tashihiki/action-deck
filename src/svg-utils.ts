@@ -61,7 +61,7 @@ export function setSanitizedSVG(parent: HTMLElement, svgStr: string): void {
     const svgEl = doc.querySelector("svg");
     if (svgEl) {
       // Import the node to the current document
-      const node = document.importNode(svgEl, true);
+      const node = activeDocument.importNode(svgEl, true);
       parent.appendChild(node);
     }
   } catch {

@@ -21,7 +21,7 @@ export class ActionDeckSettingTab extends PluginSettingTab implements ISettingsT
     await this.plugin.historyManager.push(sectionId, deletedItem, index);
     renderCallback();
 
-    const frag = document.createDocumentFragment();
+    const frag = activeDocument.createDocumentFragment();
     frag.appendText(t("notice.itemDeleted") + ". ");
     const a = frag.createEl("a", { text: `(${t("notice.undo")})`, cls: "ll-undo-link" });
     let restored = false;
@@ -68,7 +68,6 @@ export class ActionDeckSettingTab extends PluginSettingTab implements ISettingsT
       .addSlider(slider => slider
         .setLimits(10, 50, 1)
         .setValue(this.plugin.settings.launcherIconSize)
-        .setDynamicTooltip()
         .onChange(async (v) => { this.plugin.settings.launcherIconSize = v; await this.plugin.saveSettings(); })
       )
       .addExtraButton(btn => btn
