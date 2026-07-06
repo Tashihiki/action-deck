@@ -414,9 +414,9 @@
 }
 
 /* card & modal layout helpers */
-.ll-setting-card {
+.ll-setting-card.ll-setting-card {
   flex-direction: column;
-  align-items: stretch !important;
+  align-items: stretch;
   background: var(--background-secondary);
   padding: 10px;
   border-radius: 8px;
@@ -594,8 +594,8 @@
   color: var(--text-muted);
 }
 /* IconSuggestModal */
-.ll-icon-suggest-item {
-  display: flex !important;
+.ll-icon-suggest-item.ll-icon-suggest-item {
+  display: flex;
   align-items: center;
   gap: 10px;
 }
