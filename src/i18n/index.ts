@@ -44,7 +44,7 @@ function getByPath(obj: Record<string, unknown>, path: string): string | undefin
 // Variable interpolation: "Hello {name}" + { name: "World" } → "Hello World"
 function interpolate(template: string, vars?: Record<string, string>): string {
   if (!vars) return template;
-  return template.replace(/\{(\w+)\}/g, (_, key) => vars[key] ?? `{${key}}`);
+  return template.replace(/\{(\w+)\}/g, (_: string, key: string) => vars[key] ?? `{${key}}`);
 }
 
 /**
