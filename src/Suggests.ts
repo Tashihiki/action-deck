@@ -1,14 +1,16 @@
 import { App, AbstractInputSuggest, TFile } from "obsidian";
 import * as obsidian from "obsidian";
+import type { ObsidianApp } from "./types";
 
 interface ObsidianCommand { id: string; name: string; }
 
 export class CommandSuggest extends AbstractInputSuggest<ObsidianCommand> {
   constructor(app: App, private inputEl: HTMLInputElement) { super(app, inputEl); }
   getSuggestions(query: string): ObsidianCommand[] {
-    const all = Object.values((this.app as import("./types").ObsidianApp).commands.commands);
+    const app = this.app as ObsidianApp;
+    const all: ObsidianCommand[] = Object.values(app.commands.commands);
     const q = query.toLowerCase();
-    return all.filter(cmd => cmd.name.toLowerCase().includes(q) || cmd.id.toLowerCase().includes(q)).slice(0, 30);
+    return all.filter((cmd: ObsidianCommand) => cmd.name.toLowerCase().includes(q) || cmd.id.toLowerCase().includes(q)).slice(0, 30);
   }
   renderSuggestion(cmd: ObsidianCommand, el: HTMLElement): void {
     el.createEl("div", { text: cmd.name });
@@ -25,9 +27,9 @@ export class FileSuggest extends AbstractInputSuggest<TFile> {
   constructor(app: App, private inputEl: HTMLInputElement, private basePath?: string) { super(app, inputEl); }
   getSuggestions(query: string): TFile[] {
     let files = this.app.vault.getMarkdownFiles();
-    if (this.basePath) files = files.filter(f => f.path.startsWith(this.basePath as string));
+    if (this.basePath) files = files.filter((f: TFile) => f.path.startsWith(this.basePath as string));
     const q = query.toLowerCase();
-    return files.filter(f => f.path.toLowerCase().includes(q)).slice(0, 30);
+    return files.filter((f: TFile) => f.path.toLowerCase().includes(q)).slice(0, 30);
   }
   renderSuggestion(file: TFile, el: HTMLElement): void {
     el.createEl("div", { text: file.basename });
@@ -43,9 +45,9 @@ export class FileSuggest extends AbstractInputSuggest<TFile> {
 export class FolderSuggest extends AbstractInputSuggest<obsidian.TFolder> {
   constructor(app: App, private inputEl: HTMLInputElement) { super(app, inputEl); }
   getSuggestions(query: string): obsidian.TFolder[] {
-    const folders = this.app.vault.getAllLoadedFiles().filter((f): f is obsidian.TFolder => f instanceof obsidian.TFolder);
+    const folders = this.app.vault.getAllLoadedFiles().filter((f: obsidian.TAbstractFile): f is obsidian.TFolder => f instanceof obsidian.TFolder);
     const q = query.toLowerCase();
-    return folders.filter(f => f.path.toLowerCase().includes(q) && f.path !== "/").slice(0, 30);
+    return folders.filter((f: obsidian.TFolder) => f.path.toLowerCase().includes(q) && f.path !== "/").slice(0, 30);
   }
   renderSuggestion(folder: obsidian.TFolder, el: HTMLElement): void {
     el.createEl("div", { text: folder.name || "/" });

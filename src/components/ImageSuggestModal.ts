@@ -12,8 +12,8 @@ export class ImageSuggestModal extends FuzzySuggestModal<TFile> {
   }
 
   getItems(): TFile[] {
-    const extensions = ["png", "jpg", "jpeg", "gif", "svg", "webp", "bmp"];
-    return this.app.vault.getFiles().filter(file => extensions.includes(file.extension.toLowerCase()));
+    const extensions: string[] = ["png", "jpg", "jpeg", "gif", "svg", "webp", "bmp"];
+    return this.app.vault.getFiles().filter((file: TFile) => extensions.includes(file.extension.toLowerCase()));
   }
 
   getItemText(file: TFile): string { return file.path; }

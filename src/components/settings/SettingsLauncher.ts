@@ -4,7 +4,7 @@
 import { Setting, Notice } from "obsidian";
 import * as obsidian from "obsidian";
 import { DEFAULT_SETTINGS } from "../../types";
-import type { ISettingsTab } from "../../types";
+import type { ISettingsTab, LauncherButtonConfig, DeletedItem } from "../../types";
 import { HistoryModal } from "../HistoryModal";
 import { CommandSuggest } from "../../Suggests";
 import { ImageSuggestModal } from "../ImageSuggestModal";
@@ -26,7 +26,7 @@ export function renderSection_LauncherGroups(tab: ISettingsTab, containerEl: HTM
       return;
     }
 
-    groups.forEach((groupName, idx) => {
+    groups.forEach((groupName: string, idx: number) => {
       const row = groupListEl.createDiv({ cls: "ll-settings-launcher-row" });
 
       const nameInput = row.createEl("input", { type: "text", value: groupName, cls: ["ll-settings-launcher-label-input", "ll-flex-grow"] });
@@ -80,7 +80,7 @@ export function renderSection_LauncherGroups(tab: ISettingsTab, containerEl: HTM
           const newName = nameInput.value.trim();
           if (newName && newName !== groupName) {
             if (groupName !== "") {
-              tab.plugin.settings.launcherButtons.forEach(m => {
+              tab.plugin.settings.launcherButtons.forEach((m: LauncherButtonConfig) => {
                 if (m.launcherGroup === groupName) m.launcherGroup = newName;
               });
             }
@@ -105,7 +105,7 @@ export function renderSection_LauncherGroups(tab: ISettingsTab, containerEl: HTM
       .setIcon("history")
       .setTooltip(t("settings.groups.historyTooltip") + " (restore)")
       .onClick(() => {
-        new HistoryModal(tab.app, tab.plugin, "launcherGroups", t("settings.groups.heading"), async (takenItem) => {
+        new HistoryModal(tab.app, tab.plugin, "launcherGroups", t("settings.groups.heading"), async (takenItem: DeletedItem) => {
           const groups = tab.plugin.settings.launcherGroups;
           const data = takenItem.data as string;
           if (!groups.includes(data)) {
@@ -146,7 +146,7 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
       return;
     }
 
-    launcherButtons.forEach((btn, idx) => {
+    launcherButtons.forEach((btn: LauncherButtonConfig, idx: number) => {
       const row = launcherButtonListEl.createDiv({ cls: ["ll-settings-launcher-row", "ll-setting-card"] });
 
       const isOpen = tab.openLauncherButtons.has(btn.id);
@@ -266,7 +266,7 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
       leftSide.createDiv({ text: t("settings.buttons.iconType"), cls: "setting-item-description" });
       const typeSelect = leftSide.createEl("select", { cls: ["ll-settings-launcher-input", "ll-setting-input-full"] });
       [{ val: "text", name: t("settings.buttons.typeText") }, { val: "lucide", name: t("settings.buttons.typeLucide") }, { val: "image", name: t("settings.buttons.typeImage") }, { val: "image-url", name: t("settings.buttons.typeImageUrl") }, { val: "svg", name: t("settings.buttons.typeSvg") }]
-        .forEach(opt => {
+        .forEach((opt: { val: string; name: string }) => {
           const o = typeSelect.createEl("option", { text: opt.name, value: opt.val });
           if (btn.type === opt.val) o.selected = true;
         });
@@ -381,7 +381,7 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
 
       typeSelect.addEventListener("change", () => {
         void (async () => {
-          btn.type = typeSelect.value as import("../../types").LauncherButtonConfig["type"];
+          btn.type = typeSelect.value as LauncherButtonConfig["type"];
           btn.icon = "";
           await tab.plugin.saveSettings();
           renderIconInputFields();
@@ -412,7 +412,7 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
       const groupSel = groupCont.createEl("select", { cls: ["ll-settings-launcher-input", "ll-width-full"] });
       const optNone = groupSel.createEl("option", { text: t("settings.buttons.ungrouped"), value: "" });
       if (!btn.launcherGroup) optNone.selected = true;
-      tab.plugin.settings.launcherGroups.forEach(g => {
+      tab.plugin.settings.launcherGroups.forEach((g: string) => {
         if (!g.trim()) return;
         const o = groupSel.createEl("option", { text: g, value: g });
         if (g === btn.launcherGroup) o.selected = true;
@@ -480,10 +480,10 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
       .setIcon("history")
       .setTooltip(t("settings.buttons.historyTooltip") + " (restore)")
       .onClick(() => {
-        new HistoryModal(tab.app, tab.plugin, "launcherButtons", t("settings.buttons.heading"), async (takenItem) => {
+        new HistoryModal(tab.app, tab.plugin, "launcherButtons", t("settings.buttons.heading"), async (takenItem: DeletedItem) => {
           const buttons = tab.plugin.settings.launcherButtons;
-          const data = takenItem.data as import("../../types").LauncherButtonConfig;
-          if (!buttons.some(b => b.id === data.id)) {
+          const data = takenItem.data as LauncherButtonConfig;
+          if (!buttons.some((b: LauncherButtonConfig) => b.id === data.id)) {
             buttons.push(data);
             await tab.plugin.saveSettings();
           } else {
@@ -519,12 +519,12 @@ export function renderSection_LauncherButtons(tab: ISettingsTab, containerEl: HT
   restorePresetBtn.addEventListener("click", () => {
     void (async () => {
       const settings = tab.plugin.settings;
-      const missingButtons = DEFAULT_SETTINGS.launcherButtons.filter(db => !settings.launcherButtons.some(cb => cb.id === db.id));
-      const missingGroups = (DEFAULT_SETTINGS.launcherGroups || []).filter(dg => !settings.launcherGroups.includes(dg));
+      const missingButtons = DEFAULT_SETTINGS.launcherButtons.filter((db: LauncherButtonConfig) => !settings.launcherButtons.some((cb: LauncherButtonConfig) => cb.id === db.id));
+      const missingGroups = (DEFAULT_SETTINGS.launcherGroups || []).filter((dg: string) => !settings.launcherGroups.includes(dg));
 
       if (missingButtons.length > 0 || missingGroups.length > 0) {
         if (missingButtons.length > 0) {
-          settings.launcherButtons.push(...(JSON.parse(JSON.stringify(missingButtons)) as import("../../types").LauncherButtonConfig[]));
+          settings.launcherButtons.push(...structuredClone(missingButtons));
         }
         if (missingGroups.length > 0) {
           settings.launcherGroups.push(...missingGroups);

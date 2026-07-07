@@ -3,7 +3,7 @@
 // =============================================================================
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { App, Notice, setIcon, setTooltip, normalizePath, TFile } from "obsidian";
-import type { LauncherButtonConfig, IActionDeckPlugin } from "./types";
+import type { LauncherButtonConfig, IActionDeckPlugin, ActionConfig } from "./types";
 import { setSanitizedSVG } from "./svg-utils";
 import { t } from "./i18n";
 
@@ -113,7 +113,7 @@ export function LauncherButtonPanel({ app, plugin }: Props) {
     if (runningCmd) return;
 
     // Use the first action's command ID as the "running" state indicator
-    const firstAction = macro.actions.find(a => a.triggerId === "");
+    const firstAction = macro.actions.find((a: ActionConfig) => a.triggerId === "");
     const runningIndicator = firstAction?.commandId || "running";
     setRunningCmd(runningIndicator);
 
@@ -150,9 +150,9 @@ export function LauncherButtonPanel({ app, plugin }: Props) {
 
   const unassignedButtons: LauncherButtonConfig[] = [];
   const groupedButtons: Record<string, LauncherButtonConfig[]> = {};
-  validGroups.forEach(g => groupedButtons[g] = []);
+  validGroups.forEach((g: string) => groupedButtons[g] = []);
 
-  launcherButtons.forEach(btn => {
+  launcherButtons.forEach((btn: LauncherButtonConfig) => {
     if (btn.launcherGroup && validGroups.includes(btn.launcherGroup)) {
       groupedButtons[btn.launcherGroup].push(btn);
     } else {
@@ -192,7 +192,7 @@ export function LauncherButtonPanel({ app, plugin }: Props) {
   };
 
   const renderBtn = (btn: LauncherButtonConfig, key: string) => {
-    const isRunning = runningCmd !== null && btn.actions.some(a => a.commandId === runningCmd);
+    const isRunning = runningCmd !== null && btn.actions.some((a: ActionConfig) => a.commandId === runningCmd);
     return <LauncherButton key={key} btn={btn} isRunning={isRunning} />;
   };
 

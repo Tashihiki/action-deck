@@ -53,11 +53,11 @@ export class HistoryModal extends Modal {
 
     const listEl = contentEl.createDiv({ cls: "ll-history-list" });
 
-    historyList.forEach(item => {
+    historyList.forEach((item: DeletedItem) => {
       const row = listEl.createDiv({ cls: "ll-setting-card ll-history-row" });
       const left = row.createDiv({ cls: "ll-history-row-left" });
 
-      const dateStr = moment(item.timestamp).format("YYYY/MM/DD HH:mm:ss");
+      const dateStr: string = moment(item.timestamp).format("YYYY/MM/DD HH:mm:ss");
       left.createDiv({ text: dateStr, cls: "setting-item-description ll-history-date" });
 
       const data = item.data;
