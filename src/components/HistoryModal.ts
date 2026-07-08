@@ -1,7 +1,13 @@
-import { App, Modal, Notice, moment } from "obsidian";
+import { App, Modal, Notice } from "obsidian";
 import type { IActionDeckPlugin, DeletedItem } from "../types";
 import { t } from "../i18n";
 import { GenericConfirmModal } from "../Modals";
+
+function formatTimestamp(timestamp: number): string {
+  const d = new Date(timestamp);
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  return `${d.getFullYear()}/${pad(d.getMonth() + 1)}/${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
 
 export class HistoryModal extends Modal {
   private plugin: IActionDeckPlugin;
@@ -57,7 +63,7 @@ export class HistoryModal extends Modal {
       const row = listEl.createDiv({ cls: "ll-setting-card ll-history-row" });
       const left = row.createDiv({ cls: "ll-history-row-left" });
 
-      const dateStr: string = moment(item.timestamp).format("YYYY/MM/DD HH:mm:ss");
+      const dateStr: string = formatTimestamp(item.timestamp);
       left.createDiv({ text: dateStr, cls: "setting-item-description ll-history-date" });
 
       const data = item.data;
