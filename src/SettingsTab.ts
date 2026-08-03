@@ -47,6 +47,10 @@ export class ActionDeckSettingTab extends PluginSettingTab implements ISettingsT
   }
 
   display(): void {
+    this.render();
+  }
+
+  private render(): void {
     const { containerEl } = this;
     containerEl.empty();
 
@@ -72,7 +76,7 @@ export class ActionDeckSettingTab extends PluginSettingTab implements ISettingsT
       )
       .addExtraButton(btn => btn
         .setIcon("reset").setTooltip(t("common.reset"))
-        .onClick(() => { this.plugin.settings.launcherIconSize = 22; void this.plugin.saveSettings().then(() => this.display()); })
+        .onClick(() => { this.plugin.settings.launcherIconSize = 22; void this.plugin.saveSettings().then(() => this.render()); })
       );
 
     // ─── Launcher Groups ─────────────────────────────────────────
@@ -81,7 +85,7 @@ export class ActionDeckSettingTab extends PluginSettingTab implements ISettingsT
       text: t("settings.groups.sectionDesc") + " Buttons will be displayed in group order.",
       cls: "setting-item-description"
     });
-    renderSection_LauncherGroups(this, containerEl, () => this.display());
+    renderSection_LauncherGroups(this, containerEl, () => this.render());
 
     // ─── Launcher Buttons ─────────────────────────────────────────
     this.createSectionHeading(containerEl, "🕹️ " + t("settings.buttons.heading"));
