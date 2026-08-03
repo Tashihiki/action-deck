@@ -21,8 +21,10 @@ export class ActionDeckSettingTab extends PluginSettingTab implements ISettingsT
     await this.plugin.historyManager.push(sectionId, deletedItem, index);
     renderCallback();
 
-    const frag = activeDocument.createDocumentFragment();
-    frag.appendText(t("notice.itemDeleted") + ". ");
+    // createFragment は Obsidian が提供するグローバルヘルパー (prefer-create-el 対応)
+    const frag = createFragment((f) => {
+      f.appendText(t("notice.itemDeleted") + ". ");
+    });
     const a = frag.createEl("a", { text: `(${t("notice.undo")})`, cls: "ll-undo-link" });
     let restored = false;
     a.addEventListener("click", () => {
@@ -48,6 +50,13 @@ export class ActionDeckSettingTab extends PluginSettingTab implements ISettingsT
 
   display(): void {
     this.render();
+  }
+
+  // getSettingDefinitions() を実装することで、v1.13.0 以降の
+  // Obsidian 設定検索にこのタブの設定が表示されるようになる。
+  // 現状は複雑なカスタム UI のため空配列を返す最小実装としている。
+  getSettingDefinitions() {
+    return [];
   }
 
   private render(): void {
