@@ -1,6 +1,7 @@
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import hooksPlugin from 'eslint-plugin-react-hooks';
+import obsidianPlugin from 'eslint-plugin-obsidianmd';
 
 export default tseslint.config(
   eslint.configs.recommended,
@@ -9,6 +10,7 @@ export default tseslint.config(
     files: ['src/**/*.ts', 'src/**/*.tsx'],
     plugins: {
       'react-hooks': hooksPlugin,
+      'obsidianmd': obsidianPlugin,
     },
     languageOptions: {
       parserOptions: {
@@ -24,6 +26,9 @@ export default tseslint.config(
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-unused-vars': ['error', { 'argsIgnorePattern': '^_' }],
       'no-console': 'warn',
+      'obsidianmd/prefer-create-el': 'warn',
+      'obsidianmd/settings-tab/no-deprecated-display': 'warn',
+      'obsidianmd/settings-tab/prefer-setting-definitions': 'warn',
     },
   },
   {

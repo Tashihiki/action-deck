@@ -13,7 +13,7 @@ export class CommandSuggest extends AbstractInputSuggest<ObsidianCommand> {
     return all.filter((cmd: ObsidianCommand) => cmd.name.toLowerCase().includes(q) || cmd.id.toLowerCase().includes(q)).slice(0, 30);
   }
   renderSuggestion(cmd: ObsidianCommand, el: HTMLElement): void {
-    el.createEl("div", { text: cmd.name });
+    el.createDiv({ text: cmd.name });
     el.createEl("small", { text: cmd.id, cls: "ll-suggest-id" });
   }
   selectSuggestion(cmd: ObsidianCommand): void {
@@ -32,7 +32,7 @@ export class FileSuggest extends AbstractInputSuggest<TFile> {
     return files.filter((f: TFile) => f.path.toLowerCase().includes(q)).slice(0, 30);
   }
   renderSuggestion(file: TFile, el: HTMLElement): void {
-    el.createEl("div", { text: file.basename });
+    el.createDiv({ text: file.basename });
     el.createEl("small", { text: file.path, cls: "ll-suggest-id" });
   }
   selectSuggestion(file: TFile): void {
@@ -50,7 +50,7 @@ export class FolderSuggest extends AbstractInputSuggest<obsidian.TFolder> {
     return folders.filter((f: obsidian.TFolder) => f.path.toLowerCase().includes(q) && f.path !== "/").slice(0, 30);
   }
   renderSuggestion(folder: obsidian.TFolder, el: HTMLElement): void {
-    el.createEl("div", { text: folder.name || "/" });
+    el.createDiv({ text: folder.name || "/" });
     el.createEl("small", { text: folder.path, cls: "ll-suggest-id" });
   }
   selectSuggestion(folder: obsidian.TFolder): void {
