@@ -23,7 +23,7 @@ export function LauncherIconRenderer({ macro, isRunning, plugin }: LauncherIconR
         iconRef.current.empty();
         setIcon(iconRef.current, macro.icon || "help-circle");
       } catch {
-        // ignore
+        // setIcon() may throw for unknown icon names; silently fall back to an empty div
       }
     } else if (macro.type === "svg" && iconRef.current) {
       setSanitizedSVG(iconRef.current, macro.icon || "");
@@ -54,7 +54,7 @@ export function LauncherIconRenderer({ macro, isRunning, plugin }: LauncherIconR
                 src = (plugin.app.vault.adapter as import("obsidian").FileSystemAdapter).getResourcePath(normalizePath(macro.icon));
               }
             } catch {
-              // ignore
+              // getResourcePath() may throw if the vault adapter is unavailable; keep original path
             }
           }
           return (
@@ -74,6 +74,7 @@ export function LauncherIconRenderer({ macro, isRunning, plugin }: LauncherIconR
           return <span className="ll-icon-renderer" style={iconStyle}>{macro.icon || "?"}</span>;
       }
     } catch {
+      // Unexpected render error; show a warning icon rather than crashing the panel
       return <span className="ll-icon-renderer" style={iconStyle}>⚠️</span>;
     }
   };
@@ -167,7 +168,7 @@ export function LauncherButtonPanel({ app, plugin }: Props) {
         try {
           setTooltip(btnRef.current, btn.label);
         } catch {
-          // ignore
+          // setTooltip() may throw in some Obsidian versions; suppress to avoid breaking button render
         }
       }
     }, [btn.label]);

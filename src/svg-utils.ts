@@ -7,13 +7,13 @@ export function sanitizeSVG(svgStr: string): string {
   try {
     const parser = new DOMParser();
     const doc = parser.parseFromString(svgStr, "image/svg+xml");
-    
+
     // Remove <script> tags
     const scripts = doc.querySelectorAll("script");
     for (let i = 0; i < scripts.length; i++) {
-        scripts[i].remove();
+      scripts[i].remove();
     }
-    
+
     // Remove on* attributes and dangerous URI schemes (XSS mitigation)
     const allElements = doc.querySelectorAll("*");
     for (let i = 0; i < allElements.length; i++) {
@@ -22,28 +22,29 @@ export function sanitizeSVG(svgStr: string): string {
       for (const attr of attrs) {
         const attrName = attr.name.toLowerCase();
         const attrValue = attr.value.toLowerCase().replace(/\s/g, "");
-        
+
         const isEvent = attrName.startsWith("on");
-        const isDangerousScheme = attrValue.startsWith("javascript:") || 
-                                 attrValue.startsWith("data:text/html") || 
-                                 attrValue.startsWith("vbscript:");
+        const isDangerousScheme = attrValue.startsWith("javascript:") ||
+          attrValue.startsWith("data:text/html") ||
+          attrValue.startsWith("vbscript:");
 
         if (isEvent || isDangerousScheme) {
           el.removeAttribute(attr.name);
         }
       }
     }
-    
+
     const svg = doc.querySelector("svg");
     if (svg) {
-        // Also remove risky elements inside iframe or foreignObject
-        const foreign = svg.querySelectorAll("foreignObject, iframe, object, embed");
-        for (let i = 0; i < foreign.length; i++) foreign[i].remove();
-        
-        return new XMLSerializer().serializeToString(svg);
+      // Also remove risky elements inside iframe or foreignObject
+      const foreign = svg.querySelectorAll("foreignObject, iframe, object, embed");
+      for (let i = 0; i < foreign.length; i++) foreign[i].remove();
+
+      return new XMLSerializer().serializeToString(svg);
     }
     return "";
   } catch {
+    // DOMParser or XMLSerializer may fail on severely malformed SVG; return empty string as safe fallback
     return "";
   }
 }
@@ -65,6 +66,6 @@ export function setSanitizedSVG(parent: HTMLElement, svgStr: string): void {
       parent.appendChild(node);
     }
   } catch {
-    // ignore
+    // DOMParser may fail on invalid SVG; leave the parent element empty rather than crashing
   }
 }
